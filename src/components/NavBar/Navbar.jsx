@@ -24,7 +24,7 @@ export function HumbleiconsBars(props) {
 
 const Navbar = ({ toggle }) => {
   return (
-    <nav className="shadow-lg fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-black to-cool-gray-800">
+    <nav className="shadow-lg fixed top-0 left-0 w-full bg-gradient-to-r from-black to-cool-gray-800 z-999">
       <div className="container mx-auto px-6 md:px-0 py-4 flex justify-between items-center">
         <div className="flex items-center">
           <button
@@ -42,16 +42,16 @@ const Navbar = ({ toggle }) => {
             </li>
             <>
               <li>
-                <Link to="/galleria">Galleria</Link>
+                <Link to="/gallery">Galleria</Link>
               </li>
               <li>
-                <Link to="/rakennukset">Rakennukset</Link>
+                <Link to="/buildings">Rakennukset</Link>
               </li>
               <li>
-                <Link to="/varausvuorot">Varausvuorot</Link>
+                <Link to="/reservations">Varausvuorot</Link>
               </li>
               <li>
-                <Link to="/yllapito">Ylläpito</Link>
+                <Link to="/maintenance">Ylläpito</Link>
               </li>
             </>
           </ul>
@@ -64,12 +64,12 @@ const Navbar = ({ toggle }) => {
             Kirjaudu
           </Link>
 
-          {/* <button
+          <button
             type="button"
             className="inline-block bg-gray-800 text-white py-2 px-4 rounded-md transition-colors duration-300 hover:bg-gray-900"
           >
             Kirjaudu Ulos
-          </button> */}
+          </button>
         </div>
       </div>
     </nav>

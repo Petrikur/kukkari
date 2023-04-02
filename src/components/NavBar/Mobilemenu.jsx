@@ -1,22 +1,22 @@
-
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const mobilemenu = ({ isOpen, toggle }) => {
+const Mobilemenu = ({ isOpen, toggle }) => {
   const mobilemenuLinks = [
     { to: "/", label: "Etusivu" },
-    { to: "galleria", label: "Galleria" },
-    { to: "rakennukset", label: "Rakennukset" },
-    { to: "varausvuorot", label: "Varausvuorot" },
-    { to: "yllapito", label: "Ylläpito" },
+    { to: "gallery", label: "Galleria" },
+    { to: "buildings", label: "Rakennukset" },
+    { to: "reservations", label: "Varausvuorot" },
+    { to: "maintenance", label: "Ylläpito" },
+    { to: "auth", label: "Kirjaudu" },
   ];
 
   return (
     <>
       <div
-        className={`fixed z-50 w-full h-full items-center bg-gray-800 top-0 left-0 transition duration-300 ease-in-out opacity-0 ${
-          isOpen ? "opacity-100 top-0 hidden" : "top-full"
-        }"${isOpen ? "" : "hidden"}`}
+        className={`fixed w-full h-full items-center bg-gray-800 top-0 left-0 transition duration-300 ease-in-out opacity-0 ${
+          isOpen ? "" : "hidden"
+        } ${isOpen ? "opacity-100 top-0 " : "top-full"}"`}
       >
         {isOpen && (
           <div className="p-4 w-full my-20 items-center justify-center ">
@@ -35,7 +35,10 @@ const mobilemenu = ({ isOpen, toggle }) => {
               ))}
             </ul>
             <div className="px-9 items-center flex justify-center ">
-              <Link to= "/auth" className="px-4 py-2 my-4 font-bold text-white bg-green-600 rounded-md hover:bg-green-700">
+              <Link
+                to="/auth"
+                className="px-4 py-2 my-4 font-bold text-white bg-green-600 rounded-md hover:bg-green-700"
+              >
                 Kirjaudu
               </Link>
             </div>
@@ -52,4 +55,4 @@ const mobilemenu = ({ isOpen, toggle }) => {
   );
 };
 
-export default mobilemenu;
+export default Mobilemenu;
