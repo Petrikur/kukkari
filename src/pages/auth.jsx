@@ -1,33 +1,59 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../components/context/authContext";
+import {useNavigate} from "react-router-dom"
 
 const Auth = () => {
-  
+  const auth = useContext(AuthContext);
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
+  const navigate = useNavigate();
+
   const handleEmailChange = (e) => {
-    console.log(e.target.value)
     setEmail(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
-    console.log(e.target.value)
     setPassword(e.target.value);
   };
 
- 
+  const login = async (event) => {
+    event.preventDefault();
+    try {
+      const responseData = await axios.post(
+        "http://localhost:5000/api/users/login",
+        {
+          email: email,
+          password: password
+        },
+        {
+          "Content-Type": "application/json",
+        }
+      );
+      auth.login(responseData.data.userId, responseData.data.token);
+     
+      if(responseData.data.token){
+        navigate('/');
+      }
+    } catch (err) {
+      console.log(err);
+
+    }
+  };
+
   const handleSubmit = (e) => {
-    
     e.preventDefault();
-    // handle login logic
   };
   return (
     <div className="mx-auto max-w-lg p-8 bg-white shadow-lg rounded-lg py-52 my-24 z-50 ">
-      <form onSubmit={handleSubmit} className="bg-white rounded px-8 pt-6 pb-8 mb-4 ">
+      <form onSubmit={login} className="bg-white rounded px-8 pt-6 pb-8 mb-4 ">
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="email"
+          >
             Email
           </label>
           <input
@@ -41,7 +67,10 @@ const Auth = () => {
           />
         </div>
         <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="password"
+          >
             Password
           </label>
           <input
@@ -53,7 +82,9 @@ const Auth = () => {
             onChange={handlePasswordChange}
             required
           />
-          <p className="text-red-500 text-xs italic mt-2">Please choose a password.</p>
+          <p className="text-red-500 text-xs italic mt-2">
+            Please choose a password.
+          </p>
         </div>
         <div className="flex items-center justify-between">
           <button
@@ -62,7 +93,10 @@ const Auth = () => {
           >
             Sign In
           </button>
-          <a className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
+          <a
+            className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+            href="#"
+          >
             Forgot Password?
           </a>
         </div>

@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/authContext";
 
 export function HumbleiconsBars(props) {
   return (
@@ -23,6 +24,7 @@ export function HumbleiconsBars(props) {
 }
 
 const Navbar = ({ toggle }) => {
+  const auth = useContext(AuthContext);
   return (
     <nav className="shadow-lg fixed top-0 left-0 w-full bg-gradient-to-r from-black to-cool-gray-800 z-999">
       <div className="container mx-auto px-6 md:px-0 py-4 flex justify-between items-center">
@@ -40,36 +42,45 @@ const Navbar = ({ toggle }) => {
             <li>
               <Link to="/">Etusivu</Link>
             </li>
-            <>
-              <li>
-                <Link to="/gallery">Galleria</Link>
-              </li>
-              <li>
-                <Link to="/buildings">Rakennukset</Link>
-              </li>
-              <li>
-                <Link to="/reservations">Varausvuorot</Link>
-              </li>
-              <li>
-                <Link to="/maintenance">Ylläpito</Link>
-              </li>
-            </>
+
+            {auth.isLoggedIn && (
+              <>
+                {" "}
+                <li>
+                  <Link to="/gallery">Galleria</Link>
+                </li>
+                <li>
+                  <Link to="/buildings">Rakennukset</Link>
+                </li>
+                <li>
+                  <Link to="/reservations">Varausvuorot</Link>
+                </li>
+                <li>
+                  <Link to="/maintenance">Ylläpito</Link>
+                </li>{" "}
+              </>
+            )}
           </ul>
         </div>
         <div className="hidden md:block">
-          <Link
-            to="/auth"
-            className="inline-block bg-gray-800 text-white py-2 px-4 rounded-md transition-colors duration-300 hover:bg-gray-900"
-          >
-            Kirjaudu
-          </Link>
+          {!auth.isLoggedIn && (
+            <Link
+              to="/auth"
+              className="inline-block bg-gray-800 text-white py-2 px-4 rounded-md transition-colors duration-300 hover:bg-gray-900"
+            >
+              Kirjaudu
+            </Link>
+          )}
 
-          <button
-            type="button"
-            className="inline-block bg-gray-800 text-white py-2 px-4 rounded-md transition-colors duration-300 hover:bg-gray-900"
-          >
-            Kirjaudu Ulos
-          </button>
+          {auth.isLoggedIn && (
+            <button
+              type="button"
+              className="inline-block bg-gray-800 text-white py-2 px-4 rounded-md transition-colors duration-300 hover:bg-gray-900"
+              onClick={auth.logout}
+            >
+              Kirjaudu Ulos
+            </button>
+          )}
         </div>
       </div>
     </nav>

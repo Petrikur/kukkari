@@ -1,16 +1,23 @@
 import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/authContext";
 
 const Mobilemenu = ({ isOpen, toggle }) => {
-  const mobilemenuLinks = [
-    { to: "/", label: "Etusivu" },
-    { to: "gallery", label: "Galleria" },
-    { to: "buildings", label: "Rakennukset" },
-    { to: "reservations", label: "Varausvuorot" },
-    { to: "maintenance", label: "Ylläpito" },
-    { to: "auth", label: "Kirjaudu" },
-  ];
+  const auth = useContext(AuthContext);
+  let mobilemenuLinks;
 
+  if (auth.isLoggedIn) {
+    mobilemenuLinks = [
+      { to: "/", label: "Etusivu" },
+      { to: "gallery", label: "Galleria" },
+      { to: "buildings", label: "Rakennukset" },
+      { to: "reservations", label: "Varausvuorot" },
+      { to: "maintenance", label: "Ylläpito" }
+    ];
+  } else {
+    mobilemenuLinks = [{ to: "/", label: "Etusivu" }, { to: "auth", label: "Kirjaudu" }];
+   
+  }
   return (
     <>
       <div
@@ -34,22 +41,17 @@ const Mobilemenu = ({ isOpen, toggle }) => {
                 </li>
               ))}
             </ul>
-            <div className="px-9 items-center flex justify-center ">
+            {auth.isLoggedIn && <div className="px-9 items-center flex justify-center ">
               <Link
-                to="/auth"
-                className="px-4 py-2 my-4 font-bold text-white bg-green-600 rounded-md hover:bg-green-700"
+                className="px-4 py-2 my-4 font-bold text-white  bg-red-600 rounded-md hover:bg-red-700"
+                onClick={auth.logout}
               >
-                Kirjaudu
+                Kirjaudu ulos
               </Link>
-            </div>
+            </div> }
+           
           </div>
         )}
-        {/* <button
-          className="w-full px-4 py-2 font-bold text-white bg-red-600 rounded-md hover:bg-red-700"
-          // onClick={auth.logout}
-        >
-          Kirjaudu ulos
-        </button> */}
       </div>
     </>
   );
