@@ -2,14 +2,15 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../components/context/authContext";
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../Ui/LoadingSpinner";
 
 const Auth = () => {
   const auth = useContext(AuthContext);
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -19,36 +20,55 @@ const Auth = () => {
     setPassword(e.target.value);
   };
 
-  const login = async (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
+   
     try {
+      
+      setIsLoading(true);
       const responseData = await axios.post(
         "http://localhost:5000/api/users/login",
         {
           email: email,
-          password: password
+          password: password,
         },
         {
-          "Content-Type": "application/json",
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
       );
       auth.login(responseData.data.userId, responseData.data.token);
-     
-      if(responseData.data.token){
-        navigate('/');
+      setIsLoading(false);
+      if (responseData.data.token) {
+        navigate("/");
       }
+     
     } catch (err) {
       console.log(err);
-
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
   };
+
+  if (isLoading) {
+    console.log(isLoading)
+    return (
+      <div className="">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+ 
   return (
     <div className="mx-auto max-w-lg p-8 bg-white shadow-lg rounded-lg py-52 my-24 z-50 ">
-      <form onSubmit={login} className="bg-white rounded px-8 pt-6 pb-8 mb-4 ">
+      <form
+        onSubmit={handleLogin}
+        className="bg-white rounded px-8 pt-6 pb-8 mb-4 "
+      >
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
