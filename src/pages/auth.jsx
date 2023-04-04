@@ -24,7 +24,6 @@ const Auth = () => {
     event.preventDefault();
    
     try {
-      
       setIsLoading(true);
       const responseData = await axios.post(
         "http://localhost:5000/api/users/login",
@@ -45,6 +44,7 @@ const Auth = () => {
       }
      
     } catch (err) {
+      setIsLoading(false)
       console.log(err);
     }
   };
@@ -97,7 +97,7 @@ const Auth = () => {
             className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="password"
             type="password"
-            placeholder="Password"
+            placeholder="Salasana"
             value={password}
             onChange={handlePasswordChange}
             required
@@ -111,13 +111,13 @@ const Auth = () => {
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
-            Sign In
+            Kirjaudu
           </button>
           <a
             className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
             href="#"
           >
-            Forgot Password?
+            Unohdin salasanan
           </a>
         </div>
       </form>

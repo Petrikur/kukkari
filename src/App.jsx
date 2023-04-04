@@ -7,6 +7,7 @@ import LandingPage from "./pages/landingPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Auth from "./pages/auth";
 import { AuthContext } from "./components/context/authContext";
+import NotesPage from "./pages/NotesPage";
 
 let logoutTimer;
 
@@ -82,6 +83,7 @@ function App() {
     routes = (
       <React.Fragment>
         <Route path="/" element={<LandingPage />}></Route>
+        <Route path="/maintenance" element={<NotesPage />}></Route>
       </React.Fragment>
     );
   } else {
@@ -89,6 +91,7 @@ function App() {
       <React.Fragment>
         <Route path="/" element={<LandingPage />}></Route>
         <Route path="/auth" element={<Auth />}></Route>
+     
       </React.Fragment>
     );
   }
