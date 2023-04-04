@@ -1,6 +1,6 @@
 import { useState, useCallback ,useEffect} from "react";
 import React from "react";
-import "./App.css";
+
 import Navbar from "./components/NavBar/Navbar";
 import Mobilemenu from "./components/NavBar/Mobilemenu";
 import LandingPage from "./pages/landingPage";
@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Auth from "./pages/auth";
 import { AuthContext } from "./components/context/authContext";
 import NotesPage from "./pages/NotesPage";
+import UpdateNote from "./pages/UpdateNote";
 
 let logoutTimer;
 
@@ -84,6 +85,7 @@ function App() {
       <React.Fragment>
         <Route path="/" element={<LandingPage />}></Route>
         <Route path="/maintenance" element={<NotesPage />}></Route>
+        <Route path="/maintenance/:noteId" element={<UpdateNote />}></Route>
       </React.Fragment>
     );
   } else {

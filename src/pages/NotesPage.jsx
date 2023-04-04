@@ -46,7 +46,7 @@ const NotesPage = (props) => {
     setLoadedNotes((prevNotes) =>
       prevNotes.filter((note) => note.id !== deletedNoteId)
     );
-    navigate("/maintenance");
+    // navigate("/maintenance");
   };
 
   return (

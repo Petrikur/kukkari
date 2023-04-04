@@ -3,12 +3,14 @@ import { AuthContext } from "../context/authContext";
 import Modal from "../../Ui/Modal";
 import axios from "axios";
 import LoadingSpinner from "../../Ui/LoadingSpinner";
-
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const NoteItem = (props) => {
   const auth = useContext(AuthContext);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const showDeleteWarningHandler = () => {
     setShowConfirmModal(true);
@@ -21,15 +23,12 @@ const NoteItem = (props) => {
   const confirmDeleteHandler = async () => {
     setIsLoading(true);
     try {
-     await axios.delete(
-        `http://localhost:5000/api/notes/${props.id}`,
-        {
-          headers: {
-            Authorization: "Bearer " + auth.token,
-          },
-        }
-      );
-      props.onDelete(props.id)
+      await axios.delete(`http://localhost:5000/api/notes/${props.id}`, {
+        headers: {
+          Authorization: "Bearer " + auth.token,
+        },
+      });
+      props.onDelete(props.id);
       setShowConfirmModal(false);
       setIsLoading(false);
     } catch (err) {
@@ -38,6 +37,7 @@ const NoteItem = (props) => {
       setShowConfirmModal(false);
     }
   };
+
 
   return (
     <React.Fragment>
@@ -83,12 +83,12 @@ const NoteItem = (props) => {
 
         <div className="mt-5 flex items-center justify-end ">
           {auth.userId === props.creator && (
-            <button
+            <Link
               className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600"
               to={`/maintenance/${props.id}`}
             >
               Muokkaa
-            </button>
+            </Link>
           )}
           {auth.userId === props.creator && (
             <button
