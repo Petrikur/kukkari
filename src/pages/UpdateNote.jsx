@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import LoadingSpinner from "../Ui/LoadingSpinner";
@@ -11,13 +11,14 @@ const UpdateNote = () => {
   const [loadedNote, setLoadedNote] = useState(null);
   const noteId = useParams().noteId;
   const [isLoading, setIsLoading] = useState(false);
-  const [title, setTitle] = useState();
-  const [description, setDescription] = useState();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchNote = async () => {
       try {
+        setIsLoading(true)
         const responseData = await axios.get(
           `http://localhost:5000/api/notes/${noteId}`,
           {
@@ -30,8 +31,10 @@ const UpdateNote = () => {
         setLoadedNote(responseData.data.note);
         setTitle(responseData.data.note.title);
         setDescription(responseData.data.note.description);
+        setIsLoading(false)
       } catch (err) {
-        console.log(err)
+        console.log(err);
+        setIsLoading(false)
       }
     };
     fetchNote();
@@ -40,8 +43,8 @@ const UpdateNote = () => {
   const noteUpdateSubmitHandler = async (event) => {
     event.preventDefault();
     try {
-        setIsLoading(true)
-       await axios.patch(
+      setIsLoading(true);
+      await axios.patch(
         `http://localhost:5000/api/notes/${noteId}`,
         {
           title: title,
@@ -55,8 +58,8 @@ const UpdateNote = () => {
           },
         }
       );
-   
-      setIsLoading(false)
+
+      setIsLoading(false);
       navigate("/maintenance");
     } catch (err) {
       console.log(err);
@@ -89,9 +92,9 @@ const UpdateNote = () => {
   return (
     <React.Fragment>
       <form
-        className="mt-36 px-6 max-w-md mx-auto"
+        className="mt-36 max-w-2xl mx-auto border rounded px-6 py-12 sm:px-4"
         onSubmit={noteUpdateSubmitHandler}
-      >
+      ><h1 className="text-xl font-bold mb-6 text-center">Muokkaa muistiinpanoa</h1>
         <div className="mb-4">
           <label className="block text-gray-700 font-bold mb-2" htmlFor="title">
             Otsikko
@@ -111,8 +114,9 @@ const UpdateNote = () => {
           >
             Kuvaus
           </label>
-          <textarea
-            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          <textarea rows={20}
+          cols={2}
+            className="h-fit appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="description"
             value={description}
             onChange={inputHandler}
@@ -120,7 +124,7 @@ const UpdateNote = () => {
         </div>
         <div className="flex items-center justify-between">
           <button
-            className="bg-blue-200 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className=" bg-blue-200 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"
           >
             Peruuta

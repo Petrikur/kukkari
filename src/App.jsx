@@ -9,6 +9,7 @@ import Auth from "./pages/auth";
 import { AuthContext } from "./components/context/authContext";
 import NotesPage from "./pages/NotesPage";
 import UpdateNote from "./pages/UpdateNote";
+import NewNote from "./pages/NewNote";
 
 let logoutTimer;
 
@@ -86,6 +87,7 @@ function App() {
         <Route path="/" element={<LandingPage />}></Route>
         <Route path="/maintenance" element={<NotesPage />}></Route>
         <Route path="/maintenance/:noteId" element={<UpdateNote />}></Route>
+        <Route path="/maintenance/newnote" element={<NewNote />}></Route>
       </React.Fragment>
     );
   } else {

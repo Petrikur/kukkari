@@ -34,7 +34,6 @@ const NotesPage = (props) => {
   }, [axios]);
 
   if (isLoading) {
-
     return (
       <div className="">
         <LoadingSpinner />
@@ -51,19 +50,27 @@ const NotesPage = (props) => {
 
   return (
     <>
-      <h1>Kukkarin Muistiinpanot</h1>
-      <button className="">
+     
+      {/* <button className="">
         <Link to="/maintenance/newnote">Lisää uusi</Link>
-      </button>
+      </button> */}
       <React.Fragment>
         {isLoading && (
           <div className="center">
-            {" "}
             <LoadingSpinner />
           </div>
         )}
+        
+        <h1 className=" mt-24 block text-center text-2xl font-bold mb-6">Kukkarin Muistiinpanot</h1>
+        <div className="pt-10 flex items-center justify-center p-4 p">
+        <Link
+              className="px-4 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600"
+              to={`/maintenance/newnote`}
+            >
+              Lisää uusi
+            </Link></div>
         {!isLoading && loadedNotes && (
-          <div className="">
+          <div className="flex items-center justify-center">
             <NotesList items={loadedNotes} onDeleteNote={noteDeletedHandler} />
           </div>
         )}
