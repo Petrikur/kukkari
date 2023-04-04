@@ -9,7 +9,7 @@ import NotesList from "../components/Notes/NotesList";
 const NotesPage = (props) => {
   const auth = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [loadedUsers, setloadedUsers] = useState();
+  // const [loadedUsers, setloadedUsers] = useState();
   const [loadedNotes, setLoadedNotes] = useState();
   const navigate = useNavigate();
 
@@ -31,12 +31,10 @@ const NotesPage = (props) => {
     };
 
     getNotes();
-  }, []);
-
-  console.log(loadedNotes);
+  }, [axios]);
 
   if (isLoading) {
-    console.log(isLoading);
+
     return (
       <div className="">
         <LoadingSpinner />

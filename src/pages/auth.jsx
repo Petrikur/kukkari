@@ -54,7 +54,6 @@ const Auth = () => {
   };
 
   if (isLoading) {
-    console.log(isLoading)
     return (
       <div className="">
         <LoadingSpinner />

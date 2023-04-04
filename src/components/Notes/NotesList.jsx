@@ -9,11 +9,6 @@ const NotesList = props => {
       </div>
     );
   }
-  console.log("props: " + props)
-
-  for(let prop in props){
-    console.log(prop)
-  }
 
   return (
     <ul className="list-none flex items-center justify-center px-4 flex-wrap gap-10 mt-12">
