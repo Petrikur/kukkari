@@ -53,14 +53,14 @@ const NewNote = () => {
     <React.Fragment>
       <div className="">
         <form
-          className=" max-w-2xl mt-36 flex flex-col px-6 mx-auto justify-center border rounded-md p-10 py-20"
+          className=" max-w-2xl mt-36 flex flex-col px-6 mx-auto justify-center border border-white rounded-md p-10 py-20 bg-gray-600 "
           onSubmit={noteSubmitHandler}
         >
           {" "}
-          <h1 className="text-center text-xl font-bold mb-6">Lisää uusi</h1>
+          <h1 className="text-center text-white text-xl font-bold mb-6">Lisää uusi</h1>
           {isLoading && <LoadingSpinner asOverlay />}
           <div className="space-y-2">
-            <label htmlFor="title" className="block text-gray-700 font-medium">
+            <label htmlFor="title" className="block text-white font-medium">
               Otsikko
             </label>
             <input
@@ -73,20 +73,20 @@ const NewNote = () => {
           <div className="space-y-2">
             <label
               htmlFor="description"
-              className="block text-gray-700 font-medium"
+              className="block text-white font-medium"
             >
               Kuvaus
             </label>
             <textarea
               onChange={inputHandler}
-              rows={15}
+              rows={10}
               cols={3}
               id="description"
               className="border border-gray-400 rounded-md px-3 py-2 w-full"
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="name" className="block text-gray-700 font-medium">
+            <label htmlFor="name" className="block text-white font-medium">
               Nimesi
             </label>
             <input

@@ -61,7 +61,9 @@ const NotesPage = (props) => {
           </div>
         )}
         
-        <h1 className=" mt-24 block text-center text-2xl font-bold mb-6">Kukkarin Muistiinpanot</h1>
+        <h1 className="mt-24 block text-center text-4xl font-bold mb-6 text-gray-800">
+  <span className="block text-indigo-500">Kukkarin</span> Muistiinpanot
+</h1>
         <div className="pt-10 flex items-center justify-center p-4 p">
         <Link
               className="px-4 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600"
