@@ -21,6 +21,7 @@ const NotesList = props => {
           creator={note.creator}
           onDelete={props.onDeleteNote}
           name={note.name}
+          createdAt={note.createdAt}
         />
       ))}
     </ul>

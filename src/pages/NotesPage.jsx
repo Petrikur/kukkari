@@ -50,7 +50,6 @@ const NotesPage = (props) => {
 
   return (
     <>
-     
       {/* <button className="">
         <Link to="/maintenance/newnote">Lisää uusi</Link>
       </button> */}
@@ -60,17 +59,18 @@ const NotesPage = (props) => {
             <LoadingSpinner />
           </div>
         )}
-        
+
         <h1 className="mt-24 block text-center text-4xl font-bold mb-6 text-gray-800">
-  <span className="block text-indigo-500">Kukkarin</span> Muistiinpanot
-</h1>
+          <span className="block text-indigo-500">Kukkarin</span> Muistiinpanot
+        </h1>
         <div className="pt-10 flex items-center justify-center p-4 p">
-        <Link
-              className="px-4 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600"
-              to={`/maintenance/newnote`}
-            >
-              Lisää uusi
-            </Link></div>
+          <Link
+            className="px-4 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600"
+            to={`/maintenance/newnote`}
+          >
+            Lisää uusi
+          </Link>
+        </div>
         {!isLoading && loadedNotes && (
           <div className="flex items-center justify-center">
             <NotesList items={loadedNotes} onDeleteNote={noteDeletedHandler} />
