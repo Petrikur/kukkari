@@ -11,8 +11,7 @@ const NewNote = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formState, setFormState] = useState({
     title: "",
-    description: "",
-    name: "",
+    description: ""
   });
 
   const noteSubmitHandler = async (event) => {
@@ -24,7 +23,7 @@ const NewNote = () => {
         {
           title: formState.title,
           description: formState.description,
-          name: formState.name,
+          name: auth.name,
           userId: auth.userId,
         },
         {
@@ -83,17 +82,6 @@ const NewNote = () => {
               cols={3}
               id="description"
               className="border border-gray-400 rounded-md px-3 py-2 w-full"
-            />
-          </div>
-          <div className="space-y-2">
-            <label htmlFor="name" className="block text-white font-medium">
-              Nimesi
-            </label>
-            <input
-              id="name"
-              type="text"
-              className="border border-gray-400 rounded-md px-3 py-2 w-full"
-              onChange={inputHandler}
             />
           </div>
           <div className="text-right">

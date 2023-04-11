@@ -1,4 +1,4 @@
-import { useState, useCallback ,useEffect} from "react";
+import { useState, useCallback, useEffect } from "react";
 import React from "react";
 
 import Navbar from "./components/NavBar/Navbar";
@@ -17,35 +17,48 @@ let logoutTimer;
 function App() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [token,setToken] = useState(false);
-  const [userId,setUserId] = useState(false);
+  const [token, setToken] = useState(false);
+  const [userId, setUserId] = useState(false);
   const [tokenExpirationDate, setTokenExpirationDate] = useState();
-  
+  const [name, setName] = useState("");
 
   const toggle = () => {
     setIsOpen(!isOpen);
   };
 
- // Login 
-  const login = useCallback((uid,token, expirationDate) => {
-    setToken(token)
-    setUserId(uid)
-    
-    const tokenExpirationDate =
-      expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
-    setTokenExpirationDate(tokenExpirationDate);
+  // Login
+  const login = useCallback(async (uid, token, expirationDate) => {
+    try {
+      setToken(token);
+      setUserId(uid);
 
-    localStorage.setItem(
-      "userData",
-      JSON.stringify({
-        userId: uid,
-        token: token,
-        expiration: tokenExpirationDate.toISOString(),
-      })
-    );
+      const tokenExpirationDate =
+        expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
+      setTokenExpirationDate(tokenExpirationDate);
+
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({
+          userId: uid,
+          token: token,
+          expiration: tokenExpirationDate.toISOString(),
+        })
+      );
+
+      // get user name to be marked with note and comments
+      const response = await fetch(`http://localhost:5000/api/users/${uid}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      setName(data.name);
+    } catch (err) {
+      console.log(err);
+    }
   }, []);
 
-  // Logout 
+  // Logout
   const logout = useCallback(() => {
     setToken(null);
     setTokenExpirationDate(null);
@@ -53,7 +66,6 @@ function App() {
     localStorage.removeItem("userData");
   }, []);
 
-  
   useEffect(() => {
     if (token && tokenExpirationDate) {
       const remainingTime =
@@ -80,7 +92,7 @@ function App() {
     }
   }, [login]);
 
-  // set routes based on if user is logged in or not 
+  // set routes based on if user is logged in or not
   let routes;
   if (token) {
     routes = (
@@ -97,7 +109,6 @@ function App() {
       <React.Fragment>
         <Route path="/" element={<LandingPage />}></Route>
         <Route path="/auth" element={<Auth />}></Route>
-     
       </React.Fragment>
     );
   }
@@ -110,6 +121,7 @@ function App() {
         logout: logout,
         token: token,
         userId: userId,
+        name: name,
       }}
     >
       <div className="app">
