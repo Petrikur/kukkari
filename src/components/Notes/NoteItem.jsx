@@ -40,12 +40,37 @@ export function MaterialSymbolsAccountCircle(props) {
   );
 }
 
+export function LucideTrash2(props) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="none"
+        stroke="#888888"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2m-6 5v6m4-6v6"
+      ></path>
+    </svg>
+  );
+}
+
 const NoteItem = (props) => {
   const auth = useContext(AuthContext);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [showCommentInput, setShowCommentInput] = useState(false);
+  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState(props.comments);
 
+  // format createdAt field
   const [createdAt, setCreatedAt] = useState(
     new Date(Date.parse(props.createdAt))
   );
@@ -69,12 +94,54 @@ const NoteItem = (props) => {
       props.onDelete(props.id);
       setShowConfirmModal(false);
       setIsLoading(false);
+      setComments(comments.filter((comment) => comment.noteId !== props.id));
     } catch (err) {
       console.log(err);
       setIsLoading(false);
       setShowConfirmModal(false);
     }
   };
+
+  const handleAddCommentClick = () => {
+    setShowCommentInput(true);
+  };
+
+  const handleCommentCancel = () => {
+    setShowCommentInput(false);
+  };
+
+  const handleCommentSubmit = async (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/comments",
+        {
+          content: comment,
+          author: auth.userId,
+          noteId: props.id,
+          authorName: auth.name,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          },
+        }
+      );
+      console.log(response.data);
+      setIsLoading(false);
+      setShowCommentInput(false);
+      setComment("");
+      setComments([...comments, response.data]);
+
+      navigate("/maintenance");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Add delete comment 
 
   return (
     <React.Fragment>
@@ -122,26 +189,80 @@ const NoteItem = (props) => {
           <div>{createdAt.toLocaleDateString("fi-FI")}</div>
         </div>
 
-        <div className="mt-5 flex items-center justify-end ">
-          {auth.userId === props.creator && (
-            <Link
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 flex gap-2 items-center"
-              to={`/maintenance/${props.id}`}
-            >
-              <MaterialSymbolsEditSharp />
-              Muokkaa
-            </Link>
-          )}
-
-          {auth.userId === props.creator && (
-            <button
-              className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-600 ml-2"
-              onClick={showDeleteWarningHandler}
-            >
-              Poista
-            </button>
-          )}
+        <div className="px-20 mt-4">
+          {comments.map((comment) => {
+            return (
+              <div
+                key={comment.id}
+                className="bg-gray-100 p-4 rounded-lg shadow-md mb-4 flex justify-between items-center"
+              >
+                <div className="mr-4">
+                  <p className="text-gray-800 font-medium">{comment.name}</p>
+                  <p className="text-gray-600">{comment.content}</p>
+                </div>
+               {/* add button to delete comment  */}
+              </div>
+            );
+          })}
         </div>
+
+        {/* If comment input should be open, show input, otherwise show other buttons  */}
+        {showCommentInput ? (
+          <form onSubmit={handleCommentSubmit}>
+            <textarea
+              className="w-full h-24 p-2 mt-4 bg-gray-800 text-white rounded-md border  border-gray-600"
+              placeholder="Kirjoita kommentti..."
+              onChange={(event) => {
+                setComment(event.target.value);
+              }}
+            ></textarea>
+            <div className="mt-2 flex justify-end gap-2">
+              <button
+                className="px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-md hover:bg-green-600 ml-2"
+                type="submit"
+              >
+                Lähetä
+              </button>
+              <button
+                className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-600"
+                type="button"
+                onClick={handleCommentCancel}
+              >
+                Peruuta
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div className="mt-5 flex flex-col items-center justify-between sm:flex-row gap-4 ">
+            <button
+              onClick={handleAddCommentClick}
+              className="px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-md hover:bg-green-600 ml-2"
+            >
+              Lisää kommentti
+            </button>
+
+            <div className="flex">
+              {auth.userId === props.creator && (
+                <Link
+                  className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 flex gap-2 items-center"
+                  to={`/maintenance/${props.id}`}
+                >
+                  <MaterialSymbolsEditSharp />
+                  Muokkaa
+                </Link>
+              )}
+
+              {auth.userId === props.creator && (
+                <button
+                  className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-600 ml-2"
+                  onClick={showDeleteWarningHandler}
+                >
+                  Poista
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </li>
     </React.Fragment>
   );

@@ -45,14 +45,10 @@ const NotesPage = (props) => {
     setLoadedNotes((prevNotes) =>
       prevNotes.filter((note) => note.id !== deletedNoteId)
     );
-    // navigate("/maintenance");
   };
 
   return (
     <>
-      {/* <button className="">
-        <Link to="/maintenance/newnote">Lisää uusi</Link>
-      </button> */}
       <React.Fragment>
         {isLoading && (
           <div className="center">
