@@ -70,6 +70,7 @@ const NoteItem = (props) => {
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState(props.comments);
 
+  console.log(props);
   // format createdAt field
   const [createdAt, setCreatedAt] = useState(
     new Date(Date.parse(props.createdAt))
@@ -110,6 +111,7 @@ const NoteItem = (props) => {
     setShowCommentInput(false);
   };
 
+  // Delete note 
   const handleCommentSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
@@ -134,14 +136,32 @@ const NoteItem = (props) => {
       setShowCommentInput(false);
       setComment("");
       setComments([...comments, response.data]);
-
       navigate("/maintenance");
     } catch (err) {
       console.log(err);
     }
   };
 
-  // Add delete comment 
+  // Delete comment
+  const handleCommentDelete = async (id) => {
+    try {
+      setIsLoading(true);
+      await axios.delete(`http://localhost:5000/api/comments/${id}`, {
+        headers: {
+          Authorization: "Bearer " + auth.token,
+        },
+      });
+      // setComments(comments.filter((comment) => comment.noteId !== props.id));
+      setComments((prevComments) =>
+        prevComments.filter((comment) => comment._id !== id)
+      );
+      console.log(comments);
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <React.Fragment>
@@ -171,7 +191,7 @@ const NoteItem = (props) => {
       >
         <p>Oletko varma että haluat poistaa muistiinpanon?</p>
       </Modal>
-      <li className="border rounded-lg shadow-md p-6 mb-4 bg-gray-700 border-white shadow-slate-700 break ">
+      <li className="border rounded-lg shadow-md p-6 mb-4 bg-gray-700 border-white shadow-slate-700 break overflow-auto">
         <div className="mb-4 whitespace-normal max-w-xl">
           <h2 className="text-lg text-white font-bold mb-2 underline underline-offset-2">
             {props.title}
@@ -189,18 +209,40 @@ const NoteItem = (props) => {
           <div>{createdAt.toLocaleDateString("fi-FI")}</div>
         </div>
 
-        <div className="px-20 mt-4">
-          {comments.map((comment) => {
+        {/* Comments  */}
+        <div
+          key={props.id}
+          className="shadow-md p-6 mb-4 bg-gray-700 shadow-slate-700 break "
+        >
+          {comments.map((comment, index) => {
             return (
               <div
-                key={comment.id}
-                className="bg-gray-100 p-4 rounded-lg shadow-md mb-4 flex justify-between items-center"
+                key={index}
+                className="mb-4 flex items-center justify-between"
               >
-                <div className="mr-4">
-                  <p className="text-gray-800 font-medium">{comment.name}</p>
-                  <p className="text-gray-600">{comment.content}</p>
+                <div className="flex-grow max-w-full">
+                  <div className="text-white font-medium mb-1 underline text-md">
+                    {comment.authorName}
+                  </div>
+
+                  <div className="mr-4 bg-gray-100 shadow-md p-4 rounded-lg max-w-xl">
+                    <p className="text-gray-600 text-sm whitespace-pre-line">
+                      {comment.content}
+                    </p>
+                  </div>
                 </div>
-               {/* add button to delete comment  */}
+
+                {/* If person made the comment, add delete button */}
+                {comment.author === auth.userId && (
+                  <button
+                    onClick={() => {
+                      handleCommentDelete(comment.id);
+                    }}
+                    className="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-md"
+                  >
+                    <LucideTrash2 />
+                  </button>
+                )}
               </div>
             );
           })}
@@ -210,7 +252,7 @@ const NoteItem = (props) => {
         {showCommentInput ? (
           <form onSubmit={handleCommentSubmit}>
             <textarea
-              className="w-full h-24 p-2 mt-4 bg-gray-800 text-white rounded-md border  border-gray-600"
+              className="w-full h-24 p-2 mt-4 bg-gray-800 text-white rounded-md border  border-gray-600 "
               placeholder="Kirjoita kommentti..."
               onChange={(event) => {
                 setComment(event.target.value);
