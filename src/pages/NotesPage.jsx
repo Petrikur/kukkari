@@ -1,3 +1,4 @@
+// NotesPage.jsx
 import React, { useState, useEffect, useContext } from "react";
 import LoadingSpinner from "../Ui/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
@@ -13,25 +14,31 @@ const NotesPage = (props) => {
   const [loadedNotes, setLoadedNotes] = useState();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const getNotes = async () => {
-      setIsLoading(true);
-      try {
-        const responseData = await axios("http://localhost:5000/api/notes", {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        });
-        setLoadedNotes(responseData.data.notes);
-        setIsLoading(false);
-      } catch (err) {
-        console.log(err);
-        setIsLoading(false);
-      }
-    };
+  const getNotes = async () => {
+  
+    setIsLoading(true);
+    try {
+      const responseData = await axios("http://localhost:5000/api/notes", {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
+      setLoadedNotes(responseData.data.notes);
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     getNotes();
-  }, [axios]);
+  }, []);
+
+  const noteCommentedHandler = async (e) => {
+    e.preventDefault();
+     getNotes(); 
+  };
 
   if (isLoading) {
     return (
@@ -69,7 +76,7 @@ const NotesPage = (props) => {
         </div>
         {!isLoading && loadedNotes && (
           <div className="flex items-center justify-center">
-            <NotesList items={loadedNotes} onDeleteNote={noteDeletedHandler} />
+            <NotesList items={loadedNotes} onDeleteNote={noteDeletedHandler}/>
           </div>
         )}
       </React.Fragment>

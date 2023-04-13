@@ -1,3 +1,4 @@
+// NoteItem.jsx
 import React, { useState, useContext, useEffect, useRef } from "react";
 import { AuthContext } from "../context/authContext";
 import Modal from "../../Ui/Modal";
@@ -70,7 +71,6 @@ const NoteItem = (props) => {
   const [comments, setComments] = useState(props.comments);
   const listItemRef = useRef(null); // create a ref for the list item
 
-  console.log(props);
   // format createdAt field
   const [createdAt, setCreatedAt] = useState(
     new Date(Date.parse(props.createdAt))
@@ -118,7 +118,7 @@ const NoteItem = (props) => {
     setShowCommentInput(false);
   };
 
-  // Delete note
+  // Submit new comment
   const handleCommentSubmit = async (event) => {
     event.preventDefault();
     
@@ -164,7 +164,6 @@ const NoteItem = (props) => {
       setComments((prevComments) =>
         prevComments.filter((comment) => comment._id !== id)
       );
-      console.log(comments);
       setIsLoading(false);
     } catch (err) {
       console.log(err);
@@ -261,7 +260,7 @@ const NoteItem = (props) => {
                 {comment.author === auth.userId && (
                   <button
                     onClick={() => {
-                      handleCommentDelete(comment.id);
+                      handleCommentDelete(comment._id);
                     }}
                     className="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-md"
                   >
