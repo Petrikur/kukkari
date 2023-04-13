@@ -111,7 +111,7 @@ const NoteItem = (props) => {
     setShowCommentInput(false);
   };
 
-  // Delete note 
+  // Delete note
   const handleCommentSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
@@ -215,14 +215,25 @@ const NoteItem = (props) => {
           className="shadow-md p-6 mb-4 bg-gray-700 shadow-slate-700 break "
         >
           {comments.map((comment, index) => {
+            {/*  format date to finnish format */}
+            const formattedDate = new Date(comment.createdAt).toLocaleString(
+              "fi-FI",
+              {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+              }
+            );
             return (
               <div
                 key={index}
                 className="mb-4 flex items-center justify-between"
               >
                 <div className="flex-grow max-w-full">
-                  <div className="text-white font-medium mb-1 underline text-md">
-                    {comment.authorName}
+                  <div className="text-white font-sm mb-1  text-md">
+                    {comment.authorName} --- {formattedDate}
                   </div>
 
                   <div className="mr-4 bg-gray-100 shadow-md p-4 rounded-lg max-w-xl">
