@@ -1,9 +1,10 @@
 import React, {useContext, useState } from "react";
 import { AuthContext } from "../components/context/authContext";
-
 import LoadingSpinner from "../Ui/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const NewNote = () => {
   const auth = useContext(AuthContext);
@@ -34,8 +35,14 @@ const NewNote = () => {
         }
       );
       setIsLoading(false);
+      setTimeout(() => {
+        toast.success("Muistiinpano lisätty");
+      }, 500);
       navigate("/maintenance");
     } catch (err) {
+      // add server error message as toast message
+      const errorMessage = err.response.data.message;
+      toast.warn(errorMessage)
       setIsLoading(false);
       console.log(err);
     }
@@ -94,6 +101,12 @@ const NewNote = () => {
           </div>
         </form>
       </div>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={2500}
+        rtl={false}
+        theme="dark"
+      />
     </React.Fragment>
   );
 };

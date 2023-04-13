@@ -5,12 +5,25 @@ import LoadingSpinner from "../Ui/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../components/context/authContext";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function MaterialSymbolsRefresh(props) {
-    return (
-      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="#888888" d="M12 20q-3.35 0-5.675-2.325T4 12q0-3.35 2.325-5.675T12 4q1.725 0 3.3.712T18 6.75V4h2v7h-7V9h4.2q-.8-1.4-2.188-2.2T12 6Q9.5 6 7.75 7.75T6 12q0 2.5 1.75 4.25T12 18q1.925 0 3.475-1.1T17.65 14h2.1q-.7 2.65-2.85 4.325T12 20Z"></path></svg>
-    )
-  }
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="#888888"
+        d="M12 20q-3.35 0-5.675-2.325T4 12q0-3.35 2.325-5.675T12 4q1.725 0 3.3.712T18 6.75V4h2v7h-7V9h4.2q-.8-1.4-2.188-2.2T12 6Q9.5 6 7.75 7.75T6 12q0 2.5 1.75 4.25T12 18q1.925 0 3.475-1.1T17.65 14h2.1q-.7 2.65-2.85 4.325T12 20Z"
+      ></path>
+    </svg>
+  );
+}
 
 const UpdateNote = () => {
   const auth = useContext(AuthContext);
@@ -24,7 +37,7 @@ const UpdateNote = () => {
   useEffect(() => {
     const fetchNote = async () => {
       try {
-        setIsLoading(true)
+        setIsLoading(true);
         const responseData = await axios.get(
           `http://localhost:5000/api/notes/${noteId}`,
           {
@@ -37,19 +50,23 @@ const UpdateNote = () => {
         setLoadedNote(responseData.data.note);
         setTitle(responseData.data.note.title);
         setDescription(responseData.data.note.description);
-        setIsLoading(false)
+        setIsLoading(false);
       } catch (err) {
         console.log(err);
-        setIsLoading(false)
+        setIsLoading(false);
       }
     };
     fetchNote();
-  }, [axios, noteId]);
+  }, [noteId]);
 
   const noteUpdateSubmitHandler = async (event) => {
     event.preventDefault();
     try {
       setIsLoading(true);
+
+      // if (description.length < 5) {
+      //   return;
+      // }
       await axios.patch(
         `http://localhost:5000/api/notes/${noteId}`,
         {
@@ -64,11 +81,13 @@ const UpdateNote = () => {
           },
         }
       );
-
+      toast.success("Muistiinpano päivitetty");
       setIsLoading(false);
       navigate("/maintenance");
     } catch (err) {
       console.log(err);
+      setIsLoading(false);
+      toast.warn(err.response.data.message);
     }
   };
 
@@ -100,7 +119,10 @@ const UpdateNote = () => {
       <form
         className="mt-32 max-w-2xl mx-auto border rounded py-12 sm:px-4"
         onSubmit={noteUpdateSubmitHandler}
-      ><h1 className="text-xl font-bold mb-6 text-center">Muokkaa muistiinpanoa</h1>
+      >
+        <h1 className="text-xl font-bold mb-6 text-center">
+          Muokkaa muistiinpanoa
+        </h1>
         <div className="mb-4">
           <label className="block text-gray-700 font-bold mb-2" htmlFor="title">
             Otsikko
@@ -120,8 +142,10 @@ const UpdateNote = () => {
           >
             Kuvaus
           </label>
-          <textarea rows={20}
-          cols={2}
+          <textarea
+            placeholder="Kirjoita vähintään 8 merkkiä"
+            rows={20}
+            cols={2}
             className="h-fit appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="description"
             value={description}
@@ -132,18 +156,27 @@ const UpdateNote = () => {
           <button
             className=" bg-blue-200 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"
-            onClick={() => {navigate("/maintenance")}}
+            onClick={() => {
+              navigate("/maintenance");
+            }}
           >
             Peruuta
           </button>
           <button
             className="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
-          ><MaterialSymbolsRefresh/>
+          >
+            <MaterialSymbolsRefresh />
             Päivitä
           </button>
         </div>
       </form>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={2500}
+        rtl={false}
+        theme="dark"
+      />
     </React.Fragment>
   );
 };

@@ -6,6 +6,9 @@ import axios from "axios";
 import LoadingSpinner from "../../Ui/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 export function MaterialSymbolsEditSharp(props) {
   return (
@@ -96,7 +99,10 @@ const NoteItem = (props) => {
       setShowConfirmModal(false);
       setIsLoading(false);
       setComments(comments.filter((comment) => comment.noteId !== props.id));
+      toast.success("Muistiinpano poistettu!");
     } catch (err) {
+      const errorMessage = err.response.data.message;
+      toast.warn(errorMessage)
       console.log(err);
       setIsLoading(false);
       setShowConfirmModal(false);
@@ -121,7 +127,7 @@ const NoteItem = (props) => {
   // Submit new comment
   const handleCommentSubmit = async (event) => {
     event.preventDefault();
-    
+
     if (comment.trim() === "") {
       return;
     }
@@ -146,7 +152,10 @@ const NoteItem = (props) => {
       setShowCommentInput(false);
       setComment("");
       setComments([...comments, response.data]);
+      toast.success("Kommentti luotu!");
     } catch (err) {
+      const errorMessage = err.response.data.message;
+      toast.warn(errorMessage)
       console.log(err);
     }
   };
@@ -165,7 +174,10 @@ const NoteItem = (props) => {
         prevComments.filter((comment) => comment._id !== id)
       );
       setIsLoading(false);
+      toast.success("Kommentti poistettu!");
     } catch (err) {
+      const errorMessage = err.response.data.message;
+      toast.warn(errorMessage)
       console.log(err);
       setIsLoading(false);
     }
@@ -331,6 +343,12 @@ const NoteItem = (props) => {
           </div>
         )}
       </li>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={2500}
+        rtl={false}
+        theme="dark"
+      />
     </React.Fragment>
   );
 };

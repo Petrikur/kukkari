@@ -67,30 +67,13 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (token && tokenExpirationDate) {
-      const remainingTime =
-        tokenExpirationDate.getTime() - new Date().getTime();
-      logoutTimer = setTimeout(logout, remainingTime);
-    } else {
-      clearTimeout(logoutTimer);
-    }
-  }, [token, logout, tokenExpirationDate]);
-
-  // auto login
-  useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem("userData"));
-    if (
-      storedData &&
-      storedData.token &&
-      new Date(storedData.expiration) > new Date()
-    ) {
-      login(
-        storedData.userId,
-        storedData.token,
-        new Date(storedData.expiration)
-      );
+    if (storedData && storedData.token && new Date(storedData.expiration) > new Date()) {
+      login(storedData.userId, storedData.token, new Date(storedData.expiration));
+      const remainingTime = new Date(storedData.expiration).getTime() - new Date().getTime();
+      logoutTimer = setTimeout(logout, remainingTime);
     }
-  }, [login]);
+  }, [login, logout]);
 
   // set routes based on if user is logged in or not
   let routes;
