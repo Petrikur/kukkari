@@ -65,7 +65,6 @@ const NoteItem = (props) => {
   const auth = useContext(AuthContext);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState(props.comments);
@@ -106,13 +105,12 @@ const NoteItem = (props) => {
 
   const handleAddCommentClick = () => {
     setShowCommentInput(true);
-    
   };
 
   // Scroll to show buttons if comment input is open
-  if(showCommentInput){
+  if (showCommentInput) {
     setTimeout(() => {
-      listItemRef.current.scrollIntoView({ behavior: 'smooth', block:"end" });
+      listItemRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }, 100);
   }
 
@@ -123,6 +121,10 @@ const NoteItem = (props) => {
   // Delete note
   const handleCommentSubmit = async (event) => {
     event.preventDefault();
+    
+    if (comment.trim() === "") {
+      return;
+    }
     setIsLoading(true);
     try {
       const response = await axios.post(
@@ -140,12 +142,10 @@ const NoteItem = (props) => {
           },
         }
       );
-      console.log(response.data);
       setIsLoading(false);
       setShowCommentInput(false);
       setComment("");
       setComments([...comments, response.data]);
-      navigate("/maintenance");
     } catch (err) {
       console.log(err);
     }
@@ -200,7 +200,10 @@ const NoteItem = (props) => {
       >
         <p>Oletko varma että haluat poistaa muistiinpanon?</p>
       </Modal>
-      <li ref={listItemRef} className="border rounded-lg shadow-md p-6 mb-4 bg-gray-700 border-white shadow-slate-700 break overflow-auto">
+      <li
+        ref={listItemRef}
+        className="border rounded-lg shadow-md p-6 mb-4 bg-gray-700 border-white shadow-slate-700 break overflow-auto"
+      >
         <div className="mb-4 whitespace-normal max-w-xl">
           <h2 className="text-lg text-white font-bold mb-2 underline underline-offset-2">
             {props.title}
@@ -224,7 +227,9 @@ const NoteItem = (props) => {
           className="shadow-md p-6 mb-4 bg-gray-700 shadow-slate-700 break "
         >
           {comments.map((comment, index) => {
-            {/*  format date to finnish format */}
+            {
+              /*  format date to finnish format */
+            }
             const formattedDate = new Date(comment.createdAt).toLocaleString(
               "fi-FI",
               {
@@ -274,6 +279,7 @@ const NoteItem = (props) => {
             <textarea
               className="w-full h-24 p-2 mt-4 bg-gray-800 text-white rounded-md border  border-gray-600 "
               placeholder="Kirjoita kommentti..."
+              required
               onChange={(event) => {
                 setComment(event.target.value);
               }}
@@ -296,14 +302,14 @@ const NoteItem = (props) => {
           </form>
         ) : (
           <div className="mt-5 flex flex-col items-center justify-between sm:flex-row gap-4 ">
-            <button 
+            <button
               onClick={handleAddCommentClick}
               className="px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-md hover:bg-green-600 ml-2"
             >
               Lisää kommentti
             </button>
 
-            <div  className="flex">
+            <div className="flex">
               {auth.userId === props.creator && (
                 <Link
                   className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 flex gap-2 items-center"
@@ -315,7 +321,7 @@ const NoteItem = (props) => {
               )}
 
               {auth.userId === props.creator && (
-                <button  
+                <button
                   className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-600 ml-2"
                   onClick={showDeleteWarningHandler}
                 >
