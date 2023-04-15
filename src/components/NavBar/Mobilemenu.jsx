@@ -21,7 +21,7 @@ const Mobilemenu = ({ isOpen, toggle }) => {
   return (
     <>
       <div
-        className={`fixed w-full h-full items-center bg-gray-800 top-0 left-0 transition duration-300 ease-in-out opacity-0 ${
+        className={`fixed w-full h-full items-center z-50 bg-gray-800 top-0 left-0 transition duration-300 ease-in-out opacity-0 ${
           isOpen ? "" : "hidden"
         } ${isOpen ? "opacity-100 top-0 " : "top-full"}"`}
       >
