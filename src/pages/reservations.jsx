@@ -17,8 +17,10 @@ import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import fi from "date-fns/locale/fi";
 import Modal from "../Ui/Modal";
-import { addDays } from 'date-fns';
+import { addDays } from "date-fns";
 import "./calendar.css";
+import { isToday } from "date-fns";
+import { isSameDay } from "date-fns";
 
 const Reservations = () => {
   const locales = {
@@ -33,6 +35,7 @@ const Reservations = () => {
     getDay,
     locales: { fi: fi },
   });
+
   const auth = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState();
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -45,8 +48,8 @@ const Reservations = () => {
   const [selectedDate, setSelectedDate] = useState([
     {
       startDate: new Date(),
-      endDate: addDays(new Date(), 3),
-      key: 'selection'
+      endDate: new Date(),
+      key: "selection",
     },
   ]);
 
@@ -62,7 +65,6 @@ const Reservations = () => {
           },
         }
       );
-
       setLoadedReservations(responseData.data.reservations);
       setIsLoading(false);
       navigate("/reservations");
@@ -96,16 +98,24 @@ const Reservations = () => {
   // Open reservation calendar when button click
   const openCalendar = () => {
     setShowDatePicker(true);
-    setSelectedDate([{start: new Date(), end:new Date(),key: "selection"}])
   };
-
-  // Show disabled dates as events in larger calendar
+  //  Convert disabled dates to larget calendar events
   const convertDisabledDatesToEvents = () => {
     const events = [];
+
     loadedReservations.forEach((date) => {
-      const startDate = new Date(date.startDate);
-      const endDate = new Date(date.endDate);
-      endDate.setDate(endDate.getDate() + 1);
+      let startDate;
+      let endDate;
+
+      // If reservation is only 1 day, just create date normally, othwerwise add 1 day to endDate
+      if (date.startDate === date.endDate) {
+        startDate = new Date(date.startDate);
+        endDate = new Date(date.endDate);
+      } else {
+        startDate = new Date(date.startDate);
+        endDate = new Date(date.endDate);
+        endDate.setDate(endDate.getDate() + 1);
+      }
       events.push({
         _id: date._id,
         title: "Varattu / " + auth.name,
@@ -120,9 +130,16 @@ const Reservations = () => {
   // Make new reservation
   const submitReservation = async (event) => {
     event.preventDefault();
-    setIsLoading(true);
 
-    
+    // make this check because we are defaulting current date to selected date when opening calendar
+    if (
+      isToday(selectedDate[0].startDate) &&
+      disabledDates.some((date) => isSameDay(date, selectedDate[0].startDate))
+    ) {
+      toast.warn("Et voi varata tänään!");
+      return;
+    }
+    setIsLoading(true);
     try {
       const response = await axios.post(
         "http://localhost:5000/api/reservations/",
@@ -145,19 +162,25 @@ const Reservations = () => {
           response.data.reservation,
         ]);
         toast.success("Varaus tehty");
-        setIsLoading(false);
       }, 500);
     } catch (err) {
       const errorMessage = err.response.data.message;
       toast.warn(errorMessage);
+
       console.log(errorMessage);
     } finally {
       setShowDatePicker(false);
       navigate("/reservations");
+      setIsLoading(false);
+      setSelectedDate([
+        {
+          startDate: new Date(),
+          endDate: new Date(),
+          key: "selection",
+        },
+      ]);
     }
   };
-
-  
 
   // Delete events
   const handleDeleteEvent = async (_id) => {
@@ -212,12 +235,7 @@ const Reservations = () => {
       style: isSelected ? { ...style, ...hoverStyle } : style,
     };
   };
-  // const handleSelect = (ranges) => {
-  //   setDateRange(ranges);
-  // };
-  // const handleSelect = (ranges) => {
-  //   setDateRange(ranges.selection);
-  // };
+
   return (
     <div className="flex items-center justify-center pt-28 flex-col py-2 px-4 ">
       <Modal
@@ -254,7 +272,7 @@ const Reservations = () => {
           Voit tehdä varauksia painamalla tee varaus täällä. Alla olevassa
           kalenterissa näät jo varatut ajat. Jos perut varamaamasi ajan, muista
           poistaa varauksesi. Voit poistaa oman varauksesi klikkaamalla isosta
-          kalenterista varausta ja poistaa sen etkön tahju.
+          kalenterista varausta ja poistaa sen.
         </div>
         <div className="my-2">
           Voit varata kerralla ajan joko yhdelle päivälle tai useammalle
@@ -279,8 +297,6 @@ const Reservations = () => {
             onChange={(item) => setSelectedDate([item.selection])}
             moveRangeOnFirstSelection={false}
             ranges={selectedDate}
-           
-     
           />
           <div className="flex items-end justify-center gap-2">
             <button
