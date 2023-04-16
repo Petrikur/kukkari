@@ -1,0 +1,14 @@
+.rbc-toolbar button:nth-last-child(n + 4) {
+  display: none;
+  
+}
+
+.rbc-toolbar button {
+  color: white;
+}
+
+.rbc-toolbar  {
+    color: white;
+    font-size: large;
+  }
+  
