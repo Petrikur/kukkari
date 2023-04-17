@@ -119,6 +119,7 @@ const Reservations = () => {
       events.push({
         _id: date._id,
         title: "Varattu / " + auth.name,
+        creator: auth.userId,
         start: startDate,
         end: endDate,
         allDay: true,
@@ -205,8 +206,12 @@ const Reservations = () => {
   };
 
   const handleEventClick = (event) => {
-    setShowConfirmModal(true);
-    setSelectedEvent(event);
+    if(auth.userId === event.creator){
+      setShowConfirmModal(true);
+      setSelectedEvent(event);
+    }else{
+      toast.warn("Et voi poistaa muiden tekemiä varauksia ")
+    }
   };
 
   const cancelDeleteHandler = () => {

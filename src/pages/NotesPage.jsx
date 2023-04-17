@@ -15,7 +15,6 @@ const NotesPage = (props) => {
   const navigate = useNavigate();
 
   const getNotes = async () => {
-  
     setIsLoading(true);
     try {
       const responseData = await axios("http://localhost:5000/api/notes", {
@@ -37,7 +36,7 @@ const NotesPage = (props) => {
 
   const noteCommentedHandler = async (e) => {
     e.preventDefault();
-     getNotes(); 
+    getNotes();
   };
 
   if (isLoading) {
@@ -63,10 +62,19 @@ const NotesPage = (props) => {
           </div>
         )}
 
-        <h1 className="mt-24 block text-center text-4xl font-bold mb-6 text-gray-800">
-          <span className="block text-indigo-500">Kukkarin</span> Muistiinpanot
-        </h1>
-        <div className="pt-10 flex items-center justify-center p-4 p">
+        <div className="flex items-center justify-center pt-28 flex-col py-2 px-4 ">
+          <div className="text-white mb-20 lg:px-52">
+            <h1 className="text-4xl mb-5 ">Muistiinpanot</h1>
+            <div className="text-md">
+              Voit tehdä täällä muistiinpanoja tällä sivulla sekä kirjoittaa
+              kommentteja omiin ja muiden tekemiin muistiinpanoihin.
+            </div>
+            <div className="my-2">
+              Jos muistiinpanossa käsitellyt asiat ovat jo tehty / saatu
+              valmiiksi / sovittu, muistakaa poistaa vanhat muistiinpanot. Vai
+              onko tajunnassa
+            </div>
+          </div>
           <Link
             className="px-4 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600"
             to={`/maintenance/newnote`}
@@ -74,9 +82,10 @@ const NotesPage = (props) => {
             Lisää uusi
           </Link>
         </div>
+
         {!isLoading && loadedNotes && (
           <div className="flex items-center justify-center">
-            <NotesList items={loadedNotes} onDeleteNote={noteDeletedHandler}/>
+            <NotesList items={loadedNotes} onDeleteNote={noteDeletedHandler} />
           </div>
         )}
       </React.Fragment>
