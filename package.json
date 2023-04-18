@@ -29,6 +29,7 @@
     "postcss": "^8.4.21",
     "tailwindcss": "^3.3.1",
     "vite": "^4.2.0",
-    "vite-plugin-react-icons": "^0.2.0"
+    "vite-plugin-react-icons": "^0.2.0",
+    "vite-plugin-rewrite-all": "^1.0.1"
   }
 }

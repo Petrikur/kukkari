@@ -15,7 +15,7 @@ const Mobilemenu = ({ isOpen, toggle }) => {
       { to: "maintenance", label: "Ylläpito" }
     ];
   } else {
-    mobilemenuLinks = [{ to: "/", label: "Etusivu" }, { to: "auth", label: "Kirjaudu" }];
+    mobilemenuLinks = [{ to: "/", label: "Etusivu" }, { to: "auth", label: "Kirjaudu" },{to:"/forgotpassword", label: "Unohdin salasanan"}];
    
   }
   return (

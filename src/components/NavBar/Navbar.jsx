@@ -44,6 +44,7 @@ const Navbar = ({ toggle }) => {
             <li>
               <Link to="/">Etusivu</Link>
             </li>
+           
 
             {auth.isLoggedIn && (
               <>
@@ -63,13 +64,15 @@ const Navbar = ({ toggle }) => {
               </>
             )}
           </ul>
-        </div>
-        <div className="hidden md:block">
+        </div> 
+        <div className="hidden md:flex space-x-2">
+        <Link className="inline-block bg-gray-800 text-white py-2 px-4 rounded-md transition-colors duration-300 hover:bg-gray-900" to="/forgotpassword">Unohdin salasanan</Link>
           {!auth.isLoggedIn && (
             <Link
               to="/auth"
               className="inline-block bg-gray-800 text-white py-2 px-4 rounded-md transition-colors duration-300 hover:bg-gray-900"
             >
+            
               Kirjaudu
             </Link>
           )}
