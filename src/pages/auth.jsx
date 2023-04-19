@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../components/context/authContext";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../Ui/LoadingSpinner";
+import { ToastContainer,toast } from "react-toastify";
 
 const Auth = () => {
   const auth = useContext(AuthContext);
@@ -45,6 +46,7 @@ const Auth = () => {
      
     } catch (err) {
       setIsLoading(false)
+      toast.warn(err.response.data.message)
       console.log(err);
     }
   };
@@ -120,6 +122,7 @@ const Auth = () => {
           </a>
         </div>
       </form>
+      <ToastContainer />
     </div>
   );
 };
