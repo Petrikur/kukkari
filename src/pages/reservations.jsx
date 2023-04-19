@@ -118,7 +118,7 @@ const Reservations = () => {
       }
       events.push({
         _id: date._id,
-        title: "Varattu / " + auth.name,
+        title: "Varattu / " + date.creatorName,
         creator: auth.userId,
         start: startDate,
         end: endDate,
