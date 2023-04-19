@@ -1,21 +1,29 @@
 import React, { useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 
 const Mobilemenu = ({ isOpen, toggle }) => {
+  const navigate = useNavigate()
   const auth = useContext(AuthContext);
   let mobilemenuLinks;
 
+  const handleLogout = () => {
+   auth.logout()
+   navigate("/auth")
+   toggle(false)
+  }
+ 
   if (auth.isLoggedIn) {
     mobilemenuLinks = [
       { to: "/", label: "Etusivu" },
       { to: "gallery", label: "Galleria" },
       { to: "buildings", label: "Rakennukset" },
       { to: "reservations", label: "Varausvuorot" },
-      { to: "maintenance", label: "Ylläpito" }
+      { to: "maintenance", label: "Ylläpito" },
+  
     ];
   } else {
-    mobilemenuLinks = [{ to: "/", label: "Etusivu" }, { to: "auth", label: "Kirjaudu" },{to:"/forgotpassword", label: "Unohdin salasanan"}];
+    mobilemenuLinks = [{ to: "/", label: "Etusivu" }, { to: "/auth", label: "Kirjaudu" },{to:"/forgotpassword", label: "Unohdin salasanan"}];
    
   }
   return (
@@ -27,7 +35,7 @@ const Mobilemenu = ({ isOpen, toggle }) => {
       >
         {isOpen && (
           <div className="p-4 w-full my-20 items-center justify-center ">
-            <ul className="space-y-2 flex  flex-col items-center ">
+            <ul className="space-y-2 flex flex-col items-center ">
               {mobilemenuLinks.map((link) => (
                 <li key={link.to}>
                   <a
@@ -42,14 +50,13 @@ const Mobilemenu = ({ isOpen, toggle }) => {
               ))}
             </ul>
             {auth.isLoggedIn && <div className="px-9 items-center flex justify-center ">
-              <Link
+              <button
                 className="px-4 py-2 my-4 font-bold text-white  bg-red-600 rounded-md hover:bg-red-700"
-                onClick={auth.logout}
+                onClick={handleLogout}
               >
                 Kirjaudu ulos
-              </Link>
+              </button>
             </div> }
-           
           </div>
         )}
       </div>

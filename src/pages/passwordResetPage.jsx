@@ -40,7 +40,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center h-screen text-white">
     {isLoading && <LoadingSpinner/>}
       {requestSend && passwordChanged  ? (
         <div className="text-3xl p-5 border border-white rounded text-white">
@@ -49,10 +49,10 @@ const ResetPassword = () => {
       ) : (
         <form
           onSubmit={handleSubmit}
-          className="w-full max-w-md bg-white p-8 rounded-lg shadow-md"
+          className="w-full max-w-md border border-white p-8 rounded-lg shadow-md"
         >
           <h2 className="text-2xl font-medium mb-6">Vaihda salasana</h2>
-          <div className="mb-4">
+          <div className="mb-4 mt-16">
             <label htmlFor="password" className="block font-medium mb-2">
               Uusi salasana:
             </label>
@@ -88,7 +88,7 @@ const ResetPassword = () => {
             type="submit"
             className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
-            Reset Password
+           Vahvista
           </button>
         </form>
       )}

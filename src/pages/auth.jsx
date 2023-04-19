@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../components/context/authContext";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../Ui/LoadingSpinner";
-import { ToastContainer,toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 const Auth = () => {
   const auth = useContext(AuthContext);
@@ -23,7 +23,7 @@ const Auth = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-   
+
     try {
       setIsLoading(true);
       const responseData = await axios.post(
@@ -43,10 +43,9 @@ const Auth = () => {
       if (responseData.data.token) {
         navigate("/");
       }
-     
     } catch (err) {
-      setIsLoading(false)
-      toast.warn(err.response.data.message)
+      setIsLoading(false);
+      toast.warn(err.response.data.message);
       console.log(err);
     }
   };
@@ -63,22 +62,22 @@ const Auth = () => {
     );
   }
 
- 
   return (
-    <div className="mx-auto max-w-lg p-8 bg-white shadow-lg rounded-lg py-52 my-24 z-50 ">
+    <div className="mx-auto max-w-lg flex items-center justify-center flex-col border-white border shadow-lg rounded-lg py-10 my-24 z-50 px-2">
+      <h1 className="text-2xl text-white font-bold">Kirjaudu sisään</h1>
       <form
         onSubmit={handleLogin}
-        className="bg-white rounded px-8 pt-6 pb-8 mb-4 "
+        className="w-full max-w-md rounded px-8 pt-6 pb-8 mb-4 my-10 "
       >
         <div className="mb-4">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-gray-300 text-sm font-bold mb-2"
             htmlFor="email"
           >
             Email
           </label>
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline"
             id="email"
             type="email"
             placeholder="Email"
@@ -89,36 +88,38 @@ const Auth = () => {
         </div>
         <div className="mb-6">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-gray-300 text-sm font-bold mb-2"
             htmlFor="password"
           >
             Password
           </label>
           <input
-            className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline"
             id="password"
             type="password"
-            placeholder="Salasana"
+            placeholder="Password"
             value={password}
             onChange={handlePasswordChange}
             required
           />
-          <p className="text-red-500 text-xs italic mt-2">
-            Please choose a password.
-          </p>
+          {password.length === 0 && (
+            <p className="text-red-500 text-xs italic mt-2">
+              Choose a password
+            </p>
+          )}
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-center justify-between">
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-2 sm:mb-0"
             type="submit"
           >
-            Kirjaudu
+            Sign In
           </button>
           <a
-            className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+            className="inline-block align-baseline font-bold text-sm text-blue-300 hover:text-blue-500"
             href="#"
           >
-            Unohdin salasanan
+            Forgot Password?
           </a>
         </div>
       </form>

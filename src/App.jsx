@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect} from "react";
 import React from "react";
 import Navbar from "./components/NavBar/Navbar";
 import Mobilemenu from "./components/NavBar/Mobilemenu";
@@ -6,7 +6,7 @@ import LandingPage from "./pages/landingPage";
 import {
   BrowserRouter as Router,
   Routes,
-  Route
+  Route,useNavigate
 } from "react-router-dom";
 import Auth from "./pages/auth";
 import { AuthContext } from "./components/context/authContext";
@@ -27,6 +27,8 @@ function App() {
   const [userId, setUserId] = useState(false);
   const [tokenExpirationDate, setTokenExpirationDate] = useState();
   const [name, setName] = useState("");
+
+  // const navigate = useNavigate()
  
 
   const toggle = () => {
@@ -71,6 +73,7 @@ function App() {
     setTokenExpirationDate(null);
     setUserId(null);
     localStorage.removeItem("userData");
+    // navigate('/auth');
   }, []);
 
   let logoutTimer;

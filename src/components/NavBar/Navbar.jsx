@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 
 export function HumbleiconsBars(props) {
@@ -23,10 +23,14 @@ export function HumbleiconsBars(props) {
   );
 }
 
-
-
 const Navbar = ({ toggle }) => {
+  const handleLogout = () => {
+    auth.logout()
+    navigate("/auth")
+
+  }
   const auth = useContext(AuthContext);
+  const navigate = useNavigate();
   return (
     <nav className="shadow-lg fixed top-0 left-0 w-full bg-gradient-to-r from-black to-cool-gray-800 z-999">
       <div className="container mx-auto px-6 md:px-0 py-4 flex justify-between items-center">
@@ -44,8 +48,6 @@ const Navbar = ({ toggle }) => {
             <li>
               <Link to="/">Etusivu</Link>
             </li>
-           
-
             {auth.isLoggedIn && (
               <>
                 {" "}
@@ -76,12 +78,11 @@ const Navbar = ({ toggle }) => {
               Kirjaudu
             </Link>
           )}
-
           {auth.isLoggedIn && (
             <button
               type="button"
               className="inline-block bg-gray-800 text-white py-2 px-4 rounded-md transition-colors duration-300 hover:bg-gray-900"
-              onClick={auth.logout}
+              onClick={handleLogout}
             >
               Kirjaudu Ulos
             </button>
