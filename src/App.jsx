@@ -16,6 +16,7 @@ import NewNote from "./pages/NewNote";
 import Reservations from "./pages/reservations";
 import ForgotPasswordPage from "./pages/forgotPasswordPage";
 import ResetPassword from "./pages/passwordResetPage";
+import NotFound from "./pages/notFound";
 
 
 
@@ -107,6 +108,7 @@ function App() {
         <Route path="/maintenance/newnote" element={<NewNote />}></Route>
         <Route path="/reservations" element={<Reservations />}></Route>
         <Route path="/forgotpassword" element={<ForgotPasswordPage />}></Route>
+        <Route path="*" element={<NotFound />} />
       </React.Fragment>
     );
   } else {
@@ -120,6 +122,7 @@ function App() {
         <Route path="/forgotpassword" element={<ForgotPasswordPage />}></Route>
         <Route path="/" element={<LandingPage />}></Route>
         <Route path="/auth" element={<Auth />}></Route>
+        <Route path="*" element={<NotFound />} />
       </React.Fragment>
     );
   }
