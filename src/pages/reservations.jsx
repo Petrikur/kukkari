@@ -21,6 +21,7 @@ import { addDays } from "date-fns";
 import "./calendar.css";
 import { isToday } from "date-fns";
 import { isSameDay } from "date-fns";
+import Weather from "../components/Services/Weather";
 
 const Reservations = () => {
   const locales = {
@@ -320,7 +321,7 @@ const Reservations = () => {
             </button>
           </div>
         </React.Fragment>
-      )}
+      )}  
       <div className="mx-auto w-full lg:w-3/4 xl:w-3/4 mb-20">
         <Calendar
           events={events}

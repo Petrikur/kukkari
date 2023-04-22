@@ -11,7 +11,7 @@ const NotesList = props => {
   }
 
   return (
-    <ul className="list-none flex items-center justify-center px-4 flex-wrap gap-10 mt-12">
+    <ul className="list-none flex items-center flex-row-reverse justify-center px-4 flex-wrap-reverse gap-10 mt-12">
       {props.items.map(note => (
         <NoteItem
           key={note.id}

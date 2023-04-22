@@ -63,7 +63,7 @@ const NotesPage = (props) => {
         )}
 
         <div className="flex items-center justify-center pt-28 flex-col py-2 px-4 ">
-          <div className="text-white mb-20 lg:px-52">
+          <div className="text-white mb-20 ">
             <h1 className="text-4xl mb-5 ">Muistiinpanot</h1>
             <div className="text-md">
               Voit tehdä täällä muistiinpanoja tällä sivulla sekä kirjoittaa
