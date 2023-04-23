@@ -154,9 +154,13 @@ const NoteItem = (props) => {
       setComments([...comments, response.data]);
       toast.success("Kommentti luotu!");
     } catch (err) {
-      const errorMessage = err.response.data.message;
-      toast.warn(errorMessage)
+      const errorMessage = err.response.data;
+      toast.dismiss();
+        toast.warn(errorMessage)
       console.log(err);
+      console.log(errorMessage);
+    }finally{
+      setIsLoading(false)
     }
   };
 
@@ -177,6 +181,7 @@ const NoteItem = (props) => {
       toast.success("Kommentti poistettu!");
     } catch (err) {
       const errorMessage = err.response.data.message;
+      
       toast.warn(errorMessage)
       console.log(err);
       setIsLoading(false);

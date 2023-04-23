@@ -7,7 +7,7 @@ import LoadingSpinner from "../Ui/LoadingSpinner";
 const LandingPage = () => {
   return (
     <div
-      className="h-screen flex flex-col items-center justify-center"
+      className=" min-h-screen flex flex-col items-center justify-center"
       style={{
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
@@ -18,7 +18,7 @@ const LandingPage = () => {
         <h1 className="text-6xl font-bold text-white mb-10 text-center">
           Tervetuloa kukkariin
         </h1>
-        <div className="text-white text-xl font-bold mb-20">
+        <div className="text-white text-xl font-bold mb-20 text-center">
           Täällä voit tehdä mökkivarauksia ja tehdä muistiinpanoja ja
           kommentoida niitä ja kaikkea muuta kivaa.
         </div>

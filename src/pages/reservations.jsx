@@ -195,7 +195,7 @@ const Reservations = () => {
       });
       setEvents(events.filter((e) => e._id !== _id));
       setLoadedReservations(loadedReservations.filter((e) => e._id !== _id));
-      toast.success("Event deleted!");
+      toast.success("Varaus poistettu");
       navigate("/reservations");
     } catch (err) {
       const errorMessage = err.response.data.message;
@@ -322,7 +322,7 @@ const Reservations = () => {
           </div>
         </React.Fragment>
       )}  
-      <div className="mx-auto w-full lg:w-3/4 xl:w-3/4 mb-20">
+      <div className="mx-auto w-full lg:w-3/4 xl:w-2/4 mb-20">
         <Calendar
           events={events}
           localizer={localizer}

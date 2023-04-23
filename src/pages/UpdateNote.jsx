@@ -50,9 +50,15 @@ const UpdateNote = () => {
         setLoadedNote(responseData.data.note);
         setTitle(responseData.data.note.title);
         setDescription(responseData.data.note.description);
+        setTimeout(() => {
+        toast.success("Muistiinpano päivitetty")
+        }, 300);
         setIsLoading(false);
       } catch (err) {
         console.log(err);
+        setTimeout(() => {
+          toast.warn(err.response.data.message)
+        }, 300);
         setIsLoading(false);
       }
     };

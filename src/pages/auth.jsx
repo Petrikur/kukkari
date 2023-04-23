@@ -46,7 +46,11 @@ const Auth = () => {
       }
     } catch (err) {
       setIsLoading(false);
-      toast.warn(err.response.data.message);
+      const error = err.response.data.message;
+      setTimeout(() => {
+        toast.warn(error)
+      }, 200);
+      console.log(err.response.data.message);
       console.log(err);
     }
   };
