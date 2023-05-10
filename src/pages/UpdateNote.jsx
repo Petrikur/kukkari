@@ -39,7 +39,7 @@ const UpdateNote = () => {
       try {
         setIsLoading(true);
         const responseData = await axios.get(
-          `http://localhost:5000/api/notes/${noteId}`,
+          `${import.meta.env.VITE_SERVER_URL}` + `/notes/${noteId}`,
           {
             headers: {
               Authorization: `Bearer ${auth.token}`,
@@ -73,7 +73,7 @@ const UpdateNote = () => {
       //   return;
       // }
       await axios.patch(
-        `http://localhost:5000/api/notes/${noteId}`,
+        `${import.meta.env.VITE_SERVER_URL}`+`/notes/${noteId}`,
         {
           title: title,
           description: description,

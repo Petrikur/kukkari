@@ -21,7 +21,7 @@ const ResetPassword = () => {
     try {
       
       const response = await axios.post(
-        `http://localhost:5000/api/users/${id}/${token}`,
+        `${import.meta.env.VITE_SERVER_URL}` + `/users/${id}/${token}`,
         {
           password,
         }

@@ -20,7 +20,7 @@ const NewNote = () => {
     setIsLoading(true);
     try {
       await axios.post(
-        "http://localhost:5000/api/notes/newnote",
+        `${import.meta.env.VITE_SERVER_URL}` + "/notes/newnote",
         {
           title: formState.title,
           description: formState.description,

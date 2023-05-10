@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { TiThermometer } from "react-icons/ti";
 import { BiWind } from "react-icons/bi";
-import { FaSun } from "react-icons/fa";
 const Weather = () => {
   const [weatherData, setWeatherData] = useState(null);
 
   useEffect(() => {
     const fetchWeatherData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/weather");
+        const response = await axios.get(
+          `${import.meta.env.VITE_SERVER_URL}`+ "/weather");
         setWeatherData(response.data);
       } catch (error) {
         console.error(error);

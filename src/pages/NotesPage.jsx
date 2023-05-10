@@ -17,7 +17,8 @@ const NotesPage = (props) => {
   const getNotes = async () => {
     setIsLoading(true);
     try {
-      const responseData = await axios("http://localhost:5000/api/notes", {
+      const responseData = await axios(
+        `${import.meta.env.VITE_SERVER_URL}` + "/notes",{
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },

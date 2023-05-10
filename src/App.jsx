@@ -6,7 +6,7 @@ import LandingPage from "./pages/landingPage";
 import {
   BrowserRouter as Router,
   Routes,
-  Route,useNavigate
+  Route
 } from "react-router-dom";
 import Auth from "./pages/auth";
 import { AuthContext } from "./components/context/authContext";
@@ -18,8 +18,6 @@ import ForgotPasswordPage from "./pages/forgotPasswordPage";
 import ResetPassword from "./pages/passwordResetPage";
 import NotFound from "./pages/notFound";
 
-
-
 function App() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,9 +25,6 @@ function App() {
   const [userId, setUserId] = useState(false);
   const [tokenExpirationDate, setTokenExpirationDate] = useState();
   const [name, setName] = useState("");
-
-  // const navigate = useNavigate()
- 
 
   const toggle = () => {
     setIsOpen(!isOpen);
@@ -54,8 +49,7 @@ function App() {
         })
       );
 
-      // get user name to be marked with note and comments
-      const response = await fetch(`http://localhost:5000/api/users/${uid}`, {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/users/${uid}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

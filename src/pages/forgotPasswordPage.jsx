@@ -14,7 +14,7 @@ const ForgotPasswordPage = () => {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        "http://localhost:5000/api/users/forgotpassword",
+        `${import.meta.env.VITE_SERVER_URL}` + "/users/forgotpassword" ,
         { email }
       );
       toast.success(response.data);

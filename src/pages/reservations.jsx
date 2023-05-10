@@ -61,7 +61,7 @@ const Reservations = () => {
     setIsLoading(true);
     try {
       const responseData = await axios(
-        "http://localhost:5000/api/reservations",
+        `${import.meta.env.VITE_SERVER_URL}` +"/reservations",
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -146,7 +146,7 @@ const Reservations = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/reservations/",
+        `${import.meta.env.VITE_SERVER_URL}` + "/reservations",
         {
           startDate: selectedDate[0].startDate,
           endDate: selectedDate[0].endDate,
@@ -190,7 +190,8 @@ const Reservations = () => {
   const handleDeleteEvent = async (_id) => {
     try {
       setIsLoading(true);
-      await axios.delete(`http://localhost:5000/api/reservations/${_id}`, {
+      await axios.delete(
+        `${import.meta.env.VITE_SERVER_URL}` + `/reservations/${_id}`,{
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },

@@ -9,7 +9,6 @@ import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 export function MaterialSymbolsEditSharp(props) {
   return (
     <svg
@@ -90,11 +89,14 @@ const NoteItem = (props) => {
   const confirmDeleteHandler = async () => {
     setIsLoading(true);
     try {
-      await axios.delete(`http://localhost:5000/api/notes/${props.id}`, {
-        headers: {
-          Authorization: "Bearer " + auth.token,
-        },
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_SERVER_URL}` + `/notes/${props.id}`,
+        {
+          headers: {
+            Authorization: "Bearer " + auth.token,
+          },
+        }
+      );
       props.onDelete(props.id);
       setShowConfirmModal(false);
       setIsLoading(false);
@@ -102,7 +104,7 @@ const NoteItem = (props) => {
       toast.success("Muistiinpano poistettu!");
     } catch (err) {
       const errorMessage = err.response.data.message;
-      toast.warn(errorMessage)
+      toast.warn(errorMessage);
       console.log(err);
       setIsLoading(false);
       setShowConfirmModal(false);
@@ -134,7 +136,7 @@ const NoteItem = (props) => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/comments",
+        `${import.meta.env.VITE_SERVER_URL}` + "/comments",
         {
           content: comment,
           author: auth.userId,
@@ -156,11 +158,11 @@ const NoteItem = (props) => {
     } catch (err) {
       const errorMessage = err.response.data;
       toast.dismiss();
-        toast.warn(errorMessage)
+      toast.warn(errorMessage);
       console.log(err);
       console.log(errorMessage);
-    }finally{
-      setIsLoading(false)
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -168,7 +170,7 @@ const NoteItem = (props) => {
   const handleCommentDelete = async (id) => {
     try {
       setIsLoading(true);
-      await axios.delete(`http://localhost:5000/api/comments/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_SERVER_URL}` + `/comments/${id}`, {
         headers: {
           Authorization: "Bearer " + auth.token,
         },
@@ -181,8 +183,8 @@ const NoteItem = (props) => {
       toast.success("Kommentti poistettu!");
     } catch (err) {
       const errorMessage = err.response.data.message;
-      
-      toast.warn(errorMessage)
+
+      toast.warn(errorMessage);
       console.log(err);
       setIsLoading(false);
     }
