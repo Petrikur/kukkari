@@ -1,22 +1,22 @@
-import { useState, useCallback, useEffect} from "react";
-import React from "react";
+import { useState, useCallback, useEffect } from "react";
+import React, { Suspense } from "react";
 import Navbar from "./components/NavBar/Navbar";
 import Mobilemenu from "./components/NavBar/Mobilemenu";
 import LandingPage from "./pages/landingPage";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route
-} from "react-router-dom";
-import Auth from "./pages/auth";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthContext } from "./components/context/authContext";
-import NotesPage from "./pages/NotesPage";
-import UpdateNote from "./pages/UpdateNote";
-import NewNote from "./pages/NewNote";
-import Reservations from "./pages/reservations";
-import ForgotPasswordPage from "./pages/forgotPasswordPage";
-import ResetPassword from "./pages/passwordResetPage";
 import NotFound from "./pages/notFound";
+import LoadingSpinner from "./Ui/LoadingSpinner";
+
+const NewNote = React.lazy(() => import("./pages/NewNote"));
+const UpdateNote = React.lazy(() => import("./pages/UpdateNote"));
+const NotesPage = React.lazy(() => import("./pages/NotesPage"));
+const Reservations = React.lazy(() => import("./pages/reservations"));
+const ForgotPasswordPage = React.lazy(() =>
+  import("./pages/forgotPasswordPage")
+);
+const ResetPassword = React.lazy(() => import("./pages/passwordResetPage"));
+const Auth = React.lazy(() => import("./pages/auth"));
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +30,6 @@ function App() {
     setIsOpen(!isOpen);
   };
 
-  // Login
   const login = useCallback(async (uid, token, expirationDate) => {
     try {
       setToken(token);
@@ -49,11 +48,14 @@ function App() {
         })
       );
 
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/users/${uid}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/users/${uid}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const data = await response.json();
       setName(data.name);
     } catch (err) {
@@ -61,7 +63,7 @@ function App() {
     }
   }, []);
 
-  // Logout
+
   const logout = useCallback(() => {
     setToken(null);
     setTokenExpirationDate(null);
@@ -89,7 +91,6 @@ function App() {
     }
   }, [login, logout]);
 
-  // set routes based on if user is logged in or not
   let routes;
   if (token) {
     routes = (
@@ -139,10 +140,20 @@ function App() {
         <Router>
           <Mobilemenu toggle={toggle} isOpen={isOpen} />
           <Navbar toggle={toggle} />
-          <Routes>{routes}</Routes>
+            <Suspense
+              fallback={
+                <div className="center">
+                  <LoadingSpinner />
+                </div>
+              }
+            >
+          <Routes>
+              {routes}
+          </Routes>
+            </Suspense>
         </Router>
       </div>
- </AuthContext.Provider>
+    </AuthContext.Provider>
   );
 }
 
