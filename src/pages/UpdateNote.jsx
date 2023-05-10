@@ -51,7 +51,6 @@ const UpdateNote = () => {
         setTitle(responseData.data.note.title);
         setDescription(responseData.data.note.description);
         setTimeout(() => {
-        toast.success("Muistiinpano päivitetty")
         }, 300);
         setIsLoading(false);
       } catch (err) {
@@ -87,7 +86,9 @@ const UpdateNote = () => {
           },
         }
       );
-      toast.success("Muistiinpano päivitetty");
+      setTimeout(() => {
+        toast.success("Muistiinpano Päivitetty");
+      }, 700);
       setIsLoading(false);
       navigate("/maintenance");
     } catch (err) {
@@ -123,14 +124,14 @@ const UpdateNote = () => {
   return (
     <React.Fragment>
       <form
-        className="mt-32 max-w-2xl mx-auto border rounded py-12 sm:px-4"
+        className="max-w-lg mt-36 flex flex-col px-6 mx-auto justify-center border border-white rounded-md p-10 py-20 bg-gray-900"
         onSubmit={noteUpdateSubmitHandler}
       >
-        <h1 className="text-xl font-bold mb-6 text-center">
+        <h1 className="font-bold mb-6 text-center text-white text-2xl">
           Muokkaa muistiinpanoa
         </h1>
         <div className="mb-4">
-          <label className="block text-gray-700 font-bold mb-2" htmlFor="title">
+          <label className="block text-white font-bold mb-2" htmlFor="title">
             Otsikko
           </label>
           <input
@@ -143,7 +144,7 @@ const UpdateNote = () => {
         </div>
         <div className="mb-6">
           <label
-            className="block text-gray-700 font-bold mb-2"
+            className="block text-white font-bold mb-2"
             htmlFor="description"
           >
             Kuvaus
@@ -160,7 +161,7 @@ const UpdateNote = () => {
         </div>
         <div className="flex items-center justify-between">
           <button
-            className=" bg-blue-200 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className=" bg-blue-600 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"
             onClick={() => {
               navigate("/maintenance");
@@ -172,7 +173,7 @@ const UpdateNote = () => {
             className="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
-            <MaterialSymbolsRefresh />
+            
             Päivitä
           </button>
         </div>

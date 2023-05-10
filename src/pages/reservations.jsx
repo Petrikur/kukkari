@@ -23,6 +23,7 @@ import { isToday } from "date-fns";
 import { isSameDay } from "date-fns";
 import Weather from "../components/Services/Weather";
 
+import { CustomToolbar } from "../Ui/CustomToolbar";
 const Reservations = () => {
   const locales = {
     fi,
@@ -35,6 +36,7 @@ const Reservations = () => {
     startOfWeek: (date) => startOfWeek(date, { weekStartsOn: 1 }),
     getDay,
     locales: { fi: fi },
+    culture: "fi",
   });
 
   const auth = useContext(AuthContext);
@@ -207,11 +209,11 @@ const Reservations = () => {
   };
 
   const handleEventClick = (event) => {
-    if(auth.userId === event.creator){
+    if (auth.userId === event.creator) {
       setShowConfirmModal(true);
       setSelectedEvent(event);
-    }else{
-      toast.warn("Et voi poistaa muiden tekemiä varauksia ")
+    } else {
+      toast.warn("Et voi poistaa muiden tekemiä varauksia ");
     }
   };
 
@@ -241,6 +243,12 @@ const Reservations = () => {
       style: isSelected ? { ...style, ...hoverStyle } : style,
     };
   };
+  
+// Calendar view type
+  const views = {
+    month: true,
+  };
+  
 
   return (
     <div className="flex items-center justify-center pt-28 flex-col py-2 px-4 ">
@@ -321,7 +329,7 @@ const Reservations = () => {
             </button>
           </div>
         </React.Fragment>
-      )}  
+      )}
       <div className="mx-auto w-full lg:w-3/4 xl:w-2/4 mb-20">
         <Calendar
           events={events}
@@ -329,10 +337,9 @@ const Reservations = () => {
           style={{ height: 600 }}
           onSelectEvent={handleEventClick}
           eventPropGetter={eventStyleGetter}
-          toolbar={{
-            left: "",
-            center: "",
-            right: "prev,next",
+          views={views}
+          components={{
+            toolbar: CustomToolbar,
           }}
         />
       </div>
@@ -340,5 +347,4 @@ const Reservations = () => {
     </div>
   );
 };
-
 export default Reservations;

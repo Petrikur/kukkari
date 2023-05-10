@@ -37,7 +37,7 @@ const NewNote = () => {
       setIsLoading(false);
       setTimeout(() => {
         toast.success("Muistiinpano lisätty");
-      }, 500);
+      }, 700);
       navigate("/maintenance");
     } catch (err) {
       // add server error message as toast message
@@ -59,11 +59,11 @@ const NewNote = () => {
     <React.Fragment>
       <div className="">
         <form
-          className=" max-w-2xl mt-36 flex flex-col px-6 mx-auto justify-center border border-white rounded-md p-10 py-20 bg-gray-600 "
+          className=" max-w-lg mt-36 flex flex-col px-6 mx-auto justify-center border border-white rounded-md p-10 py-20 bg-gray-900 "
           onSubmit={noteSubmitHandler}
         >
-          {" "}
-          <h1 className="text-center text-white text-xl font-bold mb-6">
+
+          <h1 className="text-center text-white text-2xl font-bold mb-6">
             Lisää uusi
           </h1>
           {isLoading && <LoadingSpinner asOverlay />}
@@ -86,6 +86,7 @@ const NewNote = () => {
               Kuvaus <span className="">(Vähintään 8 merkkiä)</span>
             </label>
             <textarea
+            placeholder="Kirjoita kuvaus"
               onChange={inputHandler}
               rows={10}
               cols={3}
@@ -93,7 +94,7 @@ const NewNote = () => {
               className="border border-gray-400 rounded-md px-3 py-2 w-full"
             />
           </div>
-          <div className="text-right flex justify-between items-center">
+          <div className="text-right flex justify-between items-center mt-2">
             <button
               className=" bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 mt-4 px-4 rounded focus:outline-none focus:shadow-outline"
               type="button"

@@ -74,11 +74,11 @@ const Auth = () => {
       backgroundPosition: "center",
       height: "100vh",      
     }}>
-      <div className=" absolute left-0 right-0 top-52 bg-gray-700 mx-auto max-w-lg flex items-center justify-center flex-col border-white border shadow-lg rounded-lg py-10 z-50 px-2">
+      <div className=" absolute left-0 right-0 top-52 bg-gray-900 mx-auto max-w-lg flex items-center justify-center flex-col border-white border shadow-lg rounded-lg py-10 z-50 px-2">
         <h1 className="text-2xl text-white font-bold text-center">Kirjaudu sisään</h1>
         <form
           onSubmit={handleLogin}
-          className="w-full max-w-md rounded px-8 pt-6 pb-8 mb-4 my-10 py-2 sm:py-4"
+          className="w-full max-w-md rounded px-6 pt-6 pb-8 mb-4 my-10 py-2 sm:py-4"
         >
           <div className="mb-4">
             <label
@@ -102,35 +102,31 @@ const Auth = () => {
               className="block text-gray-300 text-sm font-bold mb-2"
               htmlFor="password"
             >
-              Password
+              Salasana
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline"
               id="password"
               type="password"
-              placeholder="Password"
+              placeholder="Salasana"
               value={password}
               onChange={handlePasswordChange}
               required
             />
-            {password.length === 0 && (
-              <p className="text-red-500 text-xs italic mt-2">
-                Choose a password
-              </p>
-            )}
+            
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-between">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-2 sm:mb-0"
               type="submit"
             >
-              Sign In
+              Kirjaudu
             </button>
             <a
               className="inline-block align-baseline font-bold text-sm text-blue-300 hover:text-blue-500"
               href="#"
             >
-              Forgot Password?
+               <Link to="/forgotpassword">Unohdin salasanan</Link>
             </a>
           </div>
         </form>
