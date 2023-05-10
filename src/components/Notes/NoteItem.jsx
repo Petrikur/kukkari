@@ -1,10 +1,9 @@
 // NoteItem.jsx
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useContext, useRef } from "react";
 import { AuthContext } from "../context/authContext";
 import Modal from "../../Ui/Modal";
 import axios from "axios";
 import LoadingSpinner from "../../Ui/LoadingSpinner";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -72,8 +71,6 @@ const NoteItem = (props) => {
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState(props.comments);
   const listItemRef = useRef(null); // create a ref for the list item
-
-  // format createdAt field
   const [createdAt, setCreatedAt] = useState(
     new Date(Date.parse(props.createdAt))
   );
@@ -126,7 +123,6 @@ const NoteItem = (props) => {
     setShowCommentInput(false);
   };
 
-  // Submit new comment
   const handleCommentSubmit = async (event) => {
     event.preventDefault();
 
@@ -166,7 +162,6 @@ const NoteItem = (props) => {
     }
   };
 
-  // Delete comment
   const handleCommentDelete = async (id) => {
     try {
       setIsLoading(true);
@@ -175,7 +170,6 @@ const NoteItem = (props) => {
           Authorization: "Bearer " + auth.token,
         },
       });
-      // setComments(comments.filter((comment) => comment.noteId !== props.id));
       setComments((prevComments) =>
         prevComments.filter((comment) => comment._id !== id)
       );
@@ -189,7 +183,6 @@ const NoteItem = (props) => {
       setIsLoading(false);
     }
   };
-
   return (
     <React.Fragment>
       {isLoading && <LoadingSpinner />}

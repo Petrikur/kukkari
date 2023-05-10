@@ -1,4 +1,3 @@
-// NotesPage.jsx
 import React, { useState, useEffect, useContext } from "react";
 import LoadingSpinner from "../Ui/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
@@ -7,12 +6,10 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import NotesList from "../components/Notes/NotesList";
 
-const NotesPage = (props) => {
+const NotesPage = () => {
   const auth = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
-  // const [loadedUsers, setloadedUsers] = useState();
   const [loadedNotes, setLoadedNotes] = useState();
-  const navigate = useNavigate();
 
   const getNotes = async () => {
     setIsLoading(true);
@@ -35,11 +32,6 @@ const NotesPage = (props) => {
     getNotes();
   }, []);
 
-  const noteCommentedHandler = async (e) => {
-    e.preventDefault();
-    getNotes();
-  };
-
   if (isLoading) {
     return (
       <div className="">
@@ -47,7 +39,6 @@ const NotesPage = (props) => {
       </div>
     );
   }
-
   const noteDeletedHandler = (deletedNoteId) => {
     setLoadedNotes((prevNotes) =>
       prevNotes.filter((note) => note.id !== deletedNoteId)

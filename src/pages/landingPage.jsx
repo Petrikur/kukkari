@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Weather from "../components/Services/Weather";
 import backgroundImage from "../assets/bgg.jpg";
-import LoadingSpinner from "../Ui/LoadingSpinner";
+
 
 const LandingPage = () => {
   return (
     <div className="h-screen py-[70px] flex flex-col items-center">
       <div
-        className="w-full h-full"
+        className="w-full h-2/4"
         style={{
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: "cover",

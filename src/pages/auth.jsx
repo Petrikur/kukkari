@@ -54,11 +54,7 @@ const Auth = () => {
       console.log(err);
     }
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
-
+  
   if (isLoading) {
     return (
       <div className="">

@@ -40,7 +40,6 @@ const NewNote = () => {
       }, 700);
       navigate("/maintenance");
     } catch (err) {
-      // add server error message as toast message
       const errorMessage = err.response.data.message;
       toast.warn(errorMessage);
       setIsLoading(false);
@@ -62,7 +61,6 @@ const NewNote = () => {
           className=" max-w-lg mt-36 flex flex-col px-6 mx-auto justify-center border border-white rounded-md p-10 py-20 bg-gray-900 "
           onSubmit={noteSubmitHandler}
         >
-
           <h1 className="text-center text-white text-2xl font-bold mb-6">
             Lisää uusi
           </h1>
