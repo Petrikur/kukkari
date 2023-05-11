@@ -6,7 +6,7 @@ import pluginRewriteAll from 'vite-plugin-rewrite-all';
 export default defineConfig({
   plugins: [react() , pluginRewriteAll()],
   server: {
-    
-}
+    publicPath:`${import.meta.env.VITE_SERVER_URL}`
+  }
 });
 
