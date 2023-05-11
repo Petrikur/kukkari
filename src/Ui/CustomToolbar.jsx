@@ -2,7 +2,7 @@
  export function CustomToolbar({ label, onNavigate, onView }) {
 
     return (
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 bg-gray-800 shadow-2xl  !important">
         <div className="flex items-center">
     
           <button className="mr-2" onClick={() => onNavigate("PREV")}>

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../Ui/LoadingSpinner";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 
 const ResetPassword = () => {
   const { id, token } = useParams();
@@ -92,6 +94,7 @@ const ResetPassword = () => {
           </button>
         </form>
       )}
+      <ToastContainer />
     </div>
   );
 };

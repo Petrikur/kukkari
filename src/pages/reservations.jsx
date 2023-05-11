@@ -5,6 +5,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../Ui/LoadingSpinner";
 import { AuthContext } from "../components/context/authContext";
@@ -17,11 +18,9 @@ import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import fi from "date-fns/locale/fi";
 import Modal from "../Ui/Modal";
-import { addDays } from "date-fns";
 import "./calendar.css";
 import { isToday } from "date-fns";
 import { isSameDay } from "date-fns";
-import Weather from "../components/Services/Weather";
 
 import { CustomToolbar } from "../Ui/CustomToolbar";
 const Reservations = () => {
@@ -331,8 +330,9 @@ const Reservations = () => {
           </div>
         </React.Fragment>
       )}
-      <div className="mx-auto w-full lg:w-3/4 xl:w-2/4 mb-20">
+      <div className=" calendar mx-auto w-full lg:w-3/4 xl:w-2/4 mb-20">
         <Calendar
+        
           events={events}
           localizer={localizer}
           style={{ height: 600 }}

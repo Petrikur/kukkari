@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../components/context/authContext";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../Ui/LoadingSpinner";
-import { ToastContainer, toast } from "react-toastify";
 import backgroundImage from "../assets/bgg.jpg";
 
 const Auth = () => {
@@ -13,6 +12,7 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -28,7 +28,7 @@ const Auth = () => {
     try {
       setIsLoading(true);
       const responseData = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}`+"/users/login",
+        `${import.meta.env.VITE_SERVER_URL}` + "/users/login",
         {
           email: email,
           password: password,
@@ -47,14 +47,12 @@ const Auth = () => {
     } catch (err) {
       setIsLoading(false);
       const error = err.response.data.message;
-      setTimeout(() => {
-        toast.warn(error)
-      }, 200);
+     setError(error)
       console.log(err.response.data.message);
       console.log(err);
     }
   };
-  
+
   if (isLoading) {
     return (
       <div className="">
@@ -64,14 +62,18 @@ const Auth = () => {
   }
 
   return (
-    <div style={{
-      backgroundImage: `url(${backgroundImage})`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      height: "100vh",      
-    }}>
+    <div
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        height: "100vh",
+      }}
+    >
       <div className=" absolute left-0 right-0 top-52 bg-gray-900 mx-auto max-w-lg flex items-center justify-center flex-col border-white border shadow-lg rounded-lg py-10 z-50 px-2">
-        <h1 className="text-2xl text-white font-bold text-center">Kirjaudu sisään</h1>
+        <h1 className="text-2xl text-white font-bold text-center">
+          Kirjaudu sisään
+        </h1>
         <form
           onSubmit={handleLogin}
           className="w-full max-w-md rounded px-6 pt-6 pb-8 mb-4 my-10 py-2 sm:py-4"
@@ -109,8 +111,10 @@ const Auth = () => {
               onChange={handlePasswordChange}
               required
             />
-            
           </div>
+
+          <div className="text-red-600 mb-5">{error}</div>
+
           <div className="flex flex-col sm:flex-row items-center justify-between">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-2 sm:mb-0"
@@ -122,13 +126,12 @@ const Auth = () => {
               className="inline-block align-baseline font-bold text-sm text-blue-300 hover:text-blue-500"
               href="#"
             >
-               <Link to="/forgotpassword">Unohdin salasanan</Link>
+              <Link to="/forgotpassword">Unohdin salasanan</Link>
             </a>
           </div>
         </form>
-        </div>
-        <ToastContainer />
       </div>
+    </div>
   );
 };
 

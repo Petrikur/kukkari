@@ -3,7 +3,7 @@ import React, { Suspense } from "react";
 import Navbar from "./components/NavBar/Navbar";
 import Mobilemenu from "./components/NavBar/Mobilemenu";
 import LandingPage from "./pages/landingPage";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthContext } from "./components/context/authContext";
 import NotFound from "./pages/notFound";
 import LoadingSpinner from "./Ui/LoadingSpinner";
