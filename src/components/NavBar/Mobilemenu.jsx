@@ -1,18 +1,18 @@
 import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 
 const Mobilemenu = ({ isOpen, toggle }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const auth = useContext(AuthContext);
   let mobilemenuLinks;
 
   const handleLogout = () => {
-   auth.logout()
-   navigate("/auth")
-   toggle(false)
-  }
- 
+    auth.logout();
+    navigate("/auth");
+    toggle(false);
+  };
+
   if (auth.isLoggedIn) {
     mobilemenuLinks = [
       { to: "/", label: "Etusivu" },
@@ -20,11 +20,13 @@ const Mobilemenu = ({ isOpen, toggle }) => {
       { to: "buildings", label: "Rakennukset" },
       { to: "reservations", label: "Varausvuorot" },
       { to: "maintenance", label: "Ylläpito" },
-  
     ];
   } else {
-    mobilemenuLinks = [{ to: "/", label: "Etusivu" }, { to: "/auth", label: "Kirjaudu" },{to:"/forgotpassword", label: "Unohdin salasanan"}];
-   
+    mobilemenuLinks = [
+      { to: "/", label: "Etusivu" },
+      { to: "/auth", label: "Kirjaudu" },
+      { to: "/forgotpassword", label: "Unohdin salasanan" },
+    ];
   }
   return (
     <>
@@ -37,26 +39,26 @@ const Mobilemenu = ({ isOpen, toggle }) => {
           <div className="p-4 w-full my-20 items-center justify-center ">
             <ul className="space-y-2 flex flex-col items-center ">
               {mobilemenuLinks.map((link) => (
-                <li key={link.to}>
-                  <a
-                    href={`${link.to}`}
-                    className="block  px-4 py-2 text-white rounded-md hover:bg-gray-700"
-                    onClick={toggle}
-                  >
-                    {link.label}
-                    <div className="my-2"></div>
-                  </a>
-                </li>
+                <Link
+                  to={link.to}
+                  className="block  px-4 py-2 text-white rounded-md hover:bg-gray-700"
+                  onClick={toggle}
+                >
+                  {link.label}
+                  <div className="my-2"></div>
+                </Link>
               ))}
             </ul>
-            {auth.isLoggedIn && <div className="px-9 items-center flex justify-center ">
-              <button
-                className="px-4 py-2 my-4 font-bold text-white  bg-red-600 rounded-md hover:bg-red-700"
-                onClick={handleLogout}
-              >
-                Kirjaudu ulos
-              </button>
-            </div> }
+            {auth.isLoggedIn && (
+              <div className="px-9 items-center flex justify-center ">
+                <button
+                  className="px-4 py-2 my-4 font-bold text-white  bg-red-600 rounded-md hover:bg-red-700"
+                  onClick={handleLogout}
+                >
+                  Kirjaudu ulos
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
