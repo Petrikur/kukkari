@@ -70,7 +70,7 @@ const Auth = () => {
         height: "100vh",
       }}
     >
-      <div className=" absolute left-0 right-0 top-52 bg-gray-900 mx-auto max-w-lg flex items-center justify-center flex-col border-white border shadow-lg rounded-lg py-10 z-50 px-2">
+      <div className=" absolute left-0 right-0 top-20 md:top-52 bg-gray-900 mx-auto max-w-lg flex items-center justify-center flex-col border-white border shadow-lg rounded-lg py-10 z-40 px-2">
         <h1 className="text-2xl text-white font-bold text-center">
           Kirjaudu sisään
         </h1>

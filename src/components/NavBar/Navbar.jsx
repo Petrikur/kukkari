@@ -25,10 +25,9 @@ export function HumbleiconsBars(props) {
 
 const Navbar = ({ toggle }) => {
   const handleLogout = () => {
-    auth.logout()
-    navigate("/auth")
-
-  }
+    auth.logout();
+    navigate("/auth");
+  };
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   return (
@@ -66,15 +65,25 @@ const Navbar = ({ toggle }) => {
               </>
             )}
           </ul>
-        </div> 
+        </div>
         <div className="hidden md:flex space-x-2">
-        <Link className="inline-block bg-gray-800 text-white py-2 px-4 rounded-md transition-colors duration-300 hover:bg-gray-900" to="/forgotpassword">Unohdin salasanan</Link>
+          {!auth.isLoggedIn ? (
+            <Link
+              className="inline-block bg-gray-800 text-white py-2 px-4 rounded-md transition-colors duration-300 hover:bg-gray-900"
+              to="/forgotpassword"
+            >
+              Unohdin salasanan
+            </Link>
+          ) : (
+            <div className="inline-block  bg-gray-200 text-gray-800 font-bold py-2 px-4 ">
+              Kirjautuneena:  {auth.name}
+            </div>
+          )}
           {!auth.isLoggedIn && (
             <Link
               to="/auth"
               className="inline-block bg-gray-800 text-white py-2 px-4 rounded-md transition-colors duration-300 hover:bg-gray-900"
             >
-            
               Kirjaudu
             </Link>
           )}

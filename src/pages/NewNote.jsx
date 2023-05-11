@@ -58,7 +58,7 @@ const NewNote = () => {
     <React.Fragment>
       <div className="">
         <form
-          className=" max-w-lg mt-36 flex flex-col px-6 mx-auto justify-center border border-white rounded-md p-10 py-20 bg-gray-900 "
+          className=" max-w-lg mt-20 md:mt-36 flex flex-col px-6 mx-auto justify-center border border-white rounded-md p-10 py-20 bg-gray-900 "
           onSubmit={noteSubmitHandler}
         >
           <h1 className="text-center text-white text-2xl font-bold mb-6">
