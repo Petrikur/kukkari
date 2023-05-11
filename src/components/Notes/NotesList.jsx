@@ -3,13 +3,13 @@ import NoteItem from "./NoteItem";
 
 const NotesList = ({ items, searchQuery, onDeleteNote }) => {
   const [filteredNotes, setFilteredNotes] = useState(items);
-
+console.log(filteredNotes)
   useEffect(() => {
     const filtered = items.filter(
       (note) =>
         note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         note.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        note.creator.toLowerCase().includes(searchQuery.toLowerCase())
+        note.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredNotes(filtered);
   }, [items, searchQuery]);
