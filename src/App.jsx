@@ -18,6 +18,7 @@ const ForgotPasswordPage = React.lazy(() =>
 const ResetPassword = React.lazy(() => import("./pages/passwordResetPage"));
 const Auth = React.lazy(() => import("./pages/auth"));
 
+
 function App() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -34,7 +35,6 @@ function App() {
     try {
       setToken(token);
       setUserId(uid);
-
       const tokenExpirationDate =
         expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
       setTokenExpirationDate(tokenExpirationDate);
@@ -69,10 +69,19 @@ function App() {
     setTokenExpirationDate(null);
     setUserId(null);
     localStorage.removeItem("userData");
-    // navigate('/auth');
   }, []);
 
   let logoutTimer;
+  useEffect(() => {
+    if (token && tokenExpirationDate) {
+      const remainingTime =
+        tokenExpirationDate.getTime() - new Date().getTime();
+      logoutTimer = setTimeout(logout, remainingTime);
+    } else {
+      clearTimeout(logoutTimer);
+    }
+  }, [token, logout, tokenExpirationDate]);
+
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem("userData"));
     if (
@@ -85,11 +94,8 @@ function App() {
         storedData.token,
         new Date(storedData.expiration)
       );
-      const remainingTime =
-        new Date(storedData.expiration).getTime() - new Date().getTime();
-      logoutTimer = setTimeout(logout, remainingTime);
     }
-  }, [login, logout]);
+  }, [login]);
 
   let routes;
   if (token) {
@@ -106,7 +112,7 @@ function App() {
         <Route path="/maintenance/newnote" element={<NewNote />}></Route>
         <Route path="/reservations" element={<Reservations />}></Route>
         <Route path="/forgotpassword" element={<ForgotPasswordPage />}></Route>
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<Auth />} />
       </React.Fragment>
     );
   } else {
@@ -120,7 +126,7 @@ function App() {
         <Route path="/forgotpassword" element={<ForgotPasswordPage />}></Route>
         <Route path="/" element={<LandingPage />}></Route>
         <Route path="/auth" element={<Auth />}></Route>
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<Auth />} />
       </React.Fragment>
     );
   }
