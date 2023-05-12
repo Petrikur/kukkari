@@ -112,7 +112,7 @@ function App() {
         <Route path="/maintenance/newnote" element={<NewNote />}></Route>
         <Route path="/reservations" element={<Reservations />}></Route>
         <Route path="/forgotpassword" element={<ForgotPasswordPage />}></Route>
-        <Route path="*" element={<Auth />} />
+        <Route path="*" element={<NotFound/>} />
       </React.Fragment>
     );
   } else {
