@@ -7,7 +7,7 @@ import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthContext } from "./components/context/authContext";
 import NotFound from "./pages/notFound";
 import LoadingSpinner from "./Ui/LoadingSpinner";
-import {io} from "socket.io-client";
+import io from "socket.io-client";
 const NewNote = React.lazy(() => import("./pages/NewNote"));
 const UpdateNote = React.lazy(() => import("./pages/UpdateNote"));
 const NotesPage = React.lazy(() => import("./pages/NotesPage"));
