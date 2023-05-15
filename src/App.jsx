@@ -7,7 +7,7 @@ import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthContext } from "./components/context/authContext";
 import NotFound from "./pages/notFound";
 import LoadingSpinner from "./Ui/LoadingSpinner";
-import io from "socket.io-client";
+import io from 'socket.io-client';
 const NewNote = React.lazy(() => import("./pages/NewNote"));
 const UpdateNote = React.lazy(() => import("./pages/UpdateNote"));
 const NotesPage = React.lazy(() => import("./pages/NotesPage"));
@@ -29,7 +29,9 @@ function App() {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io(import.meta.env.VITE_SOCKETIO_URL);
+    const newSocket = io(import.meta.env.VITE_SOCKETIO_URL,{
+      transports: ['websocket'],  
+  });
     // const newSocket = io("http://localhost:5000");
     setSocket(newSocket);
     return () => newSocket.close();
