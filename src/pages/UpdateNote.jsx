@@ -33,6 +33,7 @@ const UpdateNote = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchNote = async () => {
@@ -47,16 +48,15 @@ const UpdateNote = () => {
             },
           }
         );
+
         setLoadedNote(responseData.data.note);
         setTitle(responseData.data.note.title);
         setDescription(responseData.data.note.description);
-        setTimeout(() => {
-        }, 300);
         setIsLoading(false);
       } catch (err) {
         console.log(err);
         setTimeout(() => {
-          toast.warn(err.response.data.message)
+          toast.warn(err.response.data.message);
         }, 300);
         setIsLoading(false);
       }
@@ -68,12 +68,10 @@ const UpdateNote = () => {
     event.preventDefault();
     try {
       setIsLoading(true);
+      setError(description.length < 8);
 
-      // if (description.length < 5) {
-      //   return;
-      // }
       await axios.patch(
-        `${import.meta.env.VITE_SERVER_URL}`+`/notes/${noteId}`,
+        `${import.meta.env.VITE_SERVER_URL}` + `/notes/${noteId}`,
         {
           title: title,
           description: description,
@@ -158,6 +156,7 @@ const UpdateNote = () => {
             value={description}
             onChange={inputHandler}
           />
+          {error && <div className="text-red-500">{"Kirjoita vähintään 8 merkkiä"}</div>}
         </div>
         <div className="flex items-center justify-between">
           <button
@@ -173,7 +172,6 @@ const UpdateNote = () => {
             className="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
-            
             Päivitä
           </button>
         </div>

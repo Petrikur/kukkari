@@ -7,7 +7,7 @@ import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthContext } from "./components/context/authContext";
 import NotFound from "./pages/notFound";
 import LoadingSpinner from "./Ui/LoadingSpinner";
-
+import io from "socket.io-client";
 const NewNote = React.lazy(() => import("./pages/NewNote"));
 const UpdateNote = React.lazy(() => import("./pages/UpdateNote"));
 const NotesPage = React.lazy(() => import("./pages/NotesPage"));
@@ -26,6 +26,15 @@ function App() {
   const [userId, setUserId] = useState(false);
   const [tokenExpirationDate, setTokenExpirationDate] = useState();
   const [name, setName] = useState("");
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    const newSocket = io(import.meta.VITE_SERVER_URL);
+    // const newSocket = io("http://localhost:5000");
+    setSocket(newSocket);
+    return () => newSocket.close();
+  }, []);
+
 
   const toggle = () => {
     setIsOpen(!isOpen);
@@ -107,10 +116,10 @@ function App() {
           element={<ResetPassword />}
         ></Route>
         <Route path="/" element={<LandingPage />}></Route>
-        <Route path="/maintenance" element={<NotesPage />}></Route>
-        <Route path="/maintenance/:noteId" element={<UpdateNote />}></Route>
-        <Route path="/maintenance/newnote" element={<NewNote />}></Route>
-        <Route path="/reservations" element={<Reservations />}></Route>
+        <Route path="/maintenance" element={<NotesPage socket={socket} />}></Route>
+        <Route path="/maintenance/:noteId" element={<UpdateNote  socket={socket} />}></Route>
+        <Route path="/maintenance/newnote" element={<NewNote  socket={socket} />}></Route>
+        <Route path="/reservations" element={<Reservations  socket={socket} />}></Route>
         <Route path="/forgotpassword" element={<ForgotPasswordPage />}></Route>
         <Route path="*" element={<NotFound/>} />
       </React.Fragment>

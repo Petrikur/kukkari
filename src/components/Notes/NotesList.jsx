@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import NoteItem from "./NoteItem";
 
-const NotesList = ({ items, searchQuery, onDeleteNote }) => {
+const NotesList = ({ items, searchQuery, onDeleteNote,socket }) => {
   const [filteredNotes, setFilteredNotes] = useState(items);
   useEffect(() => {
     const filtered = items.filter(
@@ -20,7 +20,6 @@ const NotesList = ({ items, searchQuery, onDeleteNote }) => {
       </div>
     );
   }
-
   return (
     <ul className="list-none flex items-center flex-row-reverse justify-center px-4 flex-wrap-reverse gap-10 mt-12">
       {filteredNotes.map((note) => (
@@ -30,10 +29,12 @@ const NotesList = ({ items, searchQuery, onDeleteNote }) => {
           title={note.title}
           description={note.description}
           creator={note.creator}
-          onDelete={onDeleteNote}
+          onDeleteNote={onDeleteNote}
           name={note.name}
           createdAt={note.createdAt}
           comments={note.comments}
+          socket={socket}
+          noteId={note._id}
         />
       ))}
     </ul>

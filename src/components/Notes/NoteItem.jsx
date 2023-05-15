@@ -1,5 +1,5 @@
 // NoteItem.jsx
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext, useRef,useEffect } from "react";
 import { AuthContext } from "../context/authContext";
 import Modal from "../../Ui/Modal";
 import axios from "axios";
@@ -62,7 +62,6 @@ export function LucideTrash2(props) {
     </svg>
   );
 }
-
 const NoteItem = (props) => {
   const auth = useContext(AuthContext);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -74,6 +73,24 @@ const NoteItem = (props) => {
   const [createdAt, setCreatedAt] = useState(
     new Date(Date.parse(props.createdAt))
   );
+  const [newComment, setNewComment] = useState(null);
+
+  useEffect(() => {
+    props.socket.on("newComment", (newComment) => {
+      if (newComment && newComment.noteId === props.id) {
+        setComments((prevComments) => [...prevComments, newComment]);
+      }
+    });
+  
+    props.socket.on(`deleteComment`, ({id}) => {
+      setComments((prevComments) => prevComments.filter(comment => comment.id !== id));
+    });
+    return () => {
+      props.socket.off(`newComment`);
+      props.socket.off(`deleteComment`);
+      props.socket.off('updateNote');
+    };
+  }, [props.id, props.socket]);
 
   const showDeleteWarningHandler = () => {
     setShowConfirmModal(true);
@@ -94,8 +111,6 @@ const NoteItem = (props) => {
           },
         }
       );
-      props.onDelete(props.id);
-      setShowConfirmModal(false);
       setIsLoading(false);
       setComments(comments.filter((comment) => comment.noteId !== props.id));
       toast.success("Muistiinpano poistettu!");
@@ -103,7 +118,10 @@ const NoteItem = (props) => {
       const errorMessage = err.response.data.message;
       toast.warn(errorMessage);
       console.log(err);
-      setIsLoading(false);
+  
+    }
+    finally{
+      setIsLoading(false)
       setShowConfirmModal(false);
     }
   };
@@ -112,7 +130,6 @@ const NoteItem = (props) => {
     setShowCommentInput(true);
   };
 
-  // Scroll to show buttons if comment input is open
   if (showCommentInput) {
     setTimeout(() => {
       listItemRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -125,6 +142,12 @@ const NoteItem = (props) => {
 
   const handleCommentSubmit = async (event) => {
     event.preventDefault();
+    const newComment = {
+      content: comment,
+      author: auth.userId,
+      noteId: props.noteId,
+      authorName: auth.name,
+    }
 
     if (comment.trim() === "") {
       return;
@@ -133,12 +156,7 @@ const NoteItem = (props) => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}` + "/comments",
-        {
-          content: comment,
-          author: auth.userId,
-          noteId: props.id,
-          authorName: auth.name,
-        },
+        newComment,
         {
           headers: {
             "Content-Type": "application/json",
@@ -146,13 +164,16 @@ const NoteItem = (props) => {
           },
         }
       );
+
       setIsLoading(false);
+      if (!props.comments) {
+        props.comments = [];
+      }
       setShowCommentInput(false);
       setComment("");
-      setComments([...comments, response.data]);
       toast.success("Kommentti luotu!");
     } catch (err) {
-      const errorMessage = err.response.data;
+      const errorMessage = err;
       toast.dismiss();
       toast.warn(errorMessage);
       console.log(err);
@@ -170,19 +191,19 @@ const NoteItem = (props) => {
           Authorization: "Bearer " + auth.token,
         },
       });
-      setComments((prevComments) =>
-        prevComments.filter((comment) => comment._id !== id)
-      );
-      setIsLoading(false);
+      setComments((prevComments) => prevComments.filter(comment => comment._id !== id));
+      props.socket.emit("deleteComment", { noteId: props.id, id: id  });
       toast.success("Kommentti poistettu!");
     } catch (err) {
-      const errorMessage = err.response.data.message;
-
+      const errorMessage = err.response.data.message
       toast.warn(errorMessage);
-      console.log(err);
-      setIsLoading(false);
+      console.log(errorMessage);
+    }
+    finally{
+      setIsLoading(false)
     }
   };
+  
   return (
     <React.Fragment>
       {isLoading && <LoadingSpinner />}
@@ -238,9 +259,7 @@ const NoteItem = (props) => {
           className="shadow-md p-6 mb-4 bg-gray-700 shadow-slate-700 break "
         >
           {comments.map((comment, index) => {
-            {
-              /*  format date to finnish format */
-            }
+            
             const formattedDate = new Date(comment.createdAt).toLocaleString(
               "fi-FI",
               {
@@ -253,13 +272,14 @@ const NoteItem = (props) => {
             );
             return (
               <div
-                key={index}
+                key={`${comment.id}-${index}`}
                 className="mb-4 flex items-center justify-between"
               >
                 <div className="flex-grow max-w-full">
                   <div className="text-white font-sm mb-1  text-md">
                     {comment.authorName} --- {formattedDate}
                   </div>
+               
 
                   <div className="mr-4 bg-gray-100 shadow-md p-4 rounded-lg max-w-xl">
                     <p className="text-gray-600 text-sm whitespace-pre-line">

@@ -6,7 +6,9 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const NewNote = () => {
+
+
+const NewNote = ({socket}) => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -18,15 +20,17 @@ const NewNote = () => {
   const noteSubmitHandler = async (event) => {
     event.preventDefault();
     setIsLoading(true);
+    const newNote = {
+      title: formState.title,
+      description: formState.description,
+      name: auth.name,
+      userId: auth.userId,
+      comments:[]
+    };
     try {
-      await axios.post(
+      const response = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}` + "/notes/newnote",
-        {
-          title: formState.title,
-          description: formState.description,
-          name: auth.name,
-          userId: auth.userId,
-        },
+        newNote,
         {
           headers: {
             "Content-Type": "application/json",
@@ -40,7 +44,7 @@ const NewNote = () => {
       }, 700);
       navigate("/maintenance");
     } catch (err) {
-      const errorMessage = err.response.data.message;
+      const errorMessage = err
       toast.warn(errorMessage);
       setIsLoading(false);
       console.log(err);
@@ -84,7 +88,7 @@ const NewNote = () => {
               Kuvaus <span className="">(Vähintään 8 merkkiä)</span>
             </label>
             <textarea
-            placeholder="Kirjoita kuvaus"
+              placeholder="Kirjoita kuvaus"
               onChange={inputHandler}
               rows={10}
               cols={3}
