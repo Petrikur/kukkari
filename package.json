@@ -19,7 +19,8 @@
     "react-icons": "^4.8.0",
     "react-router-dom": "^6.10.0",
     "react-toastify": "^9.1.2",
-    "react-transition-group": "^4.4.5"
+    "react-transition-group": "^4.4.5",
+    "socket.io-client": "^4.6.1"
   },
   "devDependencies": {
     "@iconify/json": "^2.2.43",

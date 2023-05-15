@@ -29,7 +29,7 @@ function App() {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io(import.meta.VITE_SERVER_URL);
+    const newSocket = io(import.meta.env.SOCKET_URL);
     // const newSocket = io("http://localhost:5000");
     setSocket(newSocket);
     return () => newSocket.close();
