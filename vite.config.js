@@ -7,6 +7,11 @@ dotenv.config();
 
 export default defineConfig({
   plugins: [react() , pluginRewriteAll()],
+  build: {
+    rollupOptions: {
+      external: ['socket.io-client'],
+    },
+  },
   server: {
     proxy: {
       '/api': {
@@ -15,5 +20,5 @@ export default defineConfig({
         secure: false,
       },
     },
-  },
+  }
 });
