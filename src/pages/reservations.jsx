@@ -23,7 +23,7 @@ import { isToday } from "date-fns";
 import { isSameDay } from "date-fns";
 
 import { CustomToolbar } from "../Ui/CustomToolbar";
-const Reservations = () => {
+const Reservations = ({socket}) => {
   const locales = {
     fi,
   };
@@ -55,8 +55,8 @@ const Reservations = () => {
     },
   ]);
 
-  // Get reservations
-  const getReservations = async () => {
+   // Get reservations
+   const getReservations = async () => {
     setIsLoading(true);
     try {
       const responseData = await axios(
@@ -79,6 +79,25 @@ const Reservations = () => {
   useEffect(() => {
     getReservations();
   }, []);
+
+  useEffect(() => {
+    socket.on("newReservation", (newReservation) => {
+        setLoadedReservations((prevRes) => [...prevRes, newReservation]);
+    });
+
+    socket.on("deleteReservation", ({ id }) => {
+      setLoadedReservations((prevRes) =>
+      prevRes.filter((res) => res._id !== id)
+      );
+    });
+   
+    return () => {
+      socket.off(`newReservation`);
+      socket.off("deleteReservation");
+    };
+   }, []);
+
+ 
 
   useEffect(() => {
     handleDisabledDates();
