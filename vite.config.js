@@ -6,6 +6,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      'socket.io-client': '../node_modules/socket.io-client',
+    },
+  },
   plugins: [react() , pluginRewriteAll()],
   build: {
     rollupOptions: {
@@ -20,5 +25,7 @@ export default defineConfig({
         secure: false,
       },
     },
-  }
+    
+  },
+  
 });
