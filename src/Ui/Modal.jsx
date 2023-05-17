@@ -5,9 +5,9 @@ import ReactDOM from "react-dom";
 
 const ModalOverlay = (props) => {
   const content = (
-    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 sm:w-96 md:w-120">
+    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 sm:w-96 md:w-120 ">
       <div className="relative bg-white rounded-lg ">
-        <header className="p-4 border-b">
+        <header className="p-6 border-b">
           <h1 className="text-lg font-semibold">{props.header}</h1>
         </header>
         <form

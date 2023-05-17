@@ -1,11 +1,10 @@
 import React from "react";
 import { useState, useEffect, useContext, useCallback } from "react";
-import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css'
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../Ui/LoadingSpinner";
 import { AuthContext } from "../components/context/authContext";
@@ -23,7 +22,9 @@ import { isToday } from "date-fns";
 import { isSameDay } from "date-fns";
 
 import { CustomToolbar } from "../Ui/CustomToolbar";
-const Reservations = ({socket}) => {
+import ReservationForm from "../components/Reservations/ReservationForm";
+import EventInfo from "../components/Reservations/EventInfo";
+const Reservations = ({ socket }) => {
   const locales = {
     fi,
   };
@@ -54,13 +55,15 @@ const Reservations = ({socket}) => {
       key: "selection",
     },
   ]);
+  const [showInfoModal, setShowInfoModal] = useState(false);
+  const [description, setDescription] = useState("");
 
-   // Get reservations
-   const getReservations = async () => {
+  // Get reservations
+  const getReservations = async () => {
     setIsLoading(true);
     try {
       const responseData = await axios(
-        `${import.meta.env.VITE_SERVER_URL}` +"/reservations",
+        `${import.meta.env.VITE_SERVER_URL}` + "/reservations",
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -82,22 +85,20 @@ const Reservations = ({socket}) => {
 
   useEffect(() => {
     socket.on("newReservation", (newReservation) => {
-        setLoadedReservations((prevRes) => [...prevRes, newReservation]);
+      setLoadedReservations((prevRes) => [...prevRes, newReservation]);
     });
 
     socket.on("deleteReservation", ({ id }) => {
       setLoadedReservations((prevRes) =>
-      prevRes.filter((res) => res._id !== id)
+        prevRes.filter((res) => res._id !== id)
       );
     });
-   
+
     return () => {
       socket.off(`newReservation`);
       socket.off("deleteReservation");
     };
-   }, []);
-
- 
+  }, []);
 
   useEffect(() => {
     handleDisabledDates();
@@ -127,7 +128,6 @@ const Reservations = ({socket}) => {
     loadedReservations.forEach((date) => {
       let startDate;
       let endDate;
-
       // If reservation is only 1 day, just create date normally, othwerwise add 1 day to endDate
       if (date.startDate === date.endDate) {
         startDate = new Date(date.startDate);
@@ -140,14 +140,18 @@ const Reservations = ({socket}) => {
       events.push({
         _id: date._id,
         title: "Varattu / " + date.creatorName,
-        creator: auth.userId,
+        creator: date.creator,
         start: startDate,
         end: endDate,
         allDay: true,
+        name: date.creatorName,
+        description: date.description,
       });
     });
     setEvents(events);
   };
+
+ 
 
   // Make new reservation
   const submitReservation = async (event) => {
@@ -170,6 +174,7 @@ const Reservations = ({socket}) => {
           endDate: selectedDate[0].endDate,
           creatorName: auth.name,
           userId: auth.userId,
+          description: description,
         },
         {
           headers: {
@@ -178,6 +183,7 @@ const Reservations = ({socket}) => {
           },
         }
       );
+      setDescription("")
       setTimeout(() => {
         setLoadedReservations([
           ...loadedReservations,
@@ -209,11 +215,13 @@ const Reservations = ({socket}) => {
     try {
       setIsLoading(true);
       await axios.delete(
-        `${import.meta.env.VITE_SERVER_URL}` + `/reservations/${_id}`,{
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
-        },
-      });
+        `${import.meta.env.VITE_SERVER_URL}` + `/reservations/${_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
       setEvents(events.filter((e) => e._id !== _id));
       setLoadedReservations(loadedReservations.filter((e) => e._id !== _id));
       toast.success("Varaus poistettu");
@@ -228,12 +236,8 @@ const Reservations = ({socket}) => {
   };
 
   const handleEventClick = (event) => {
-    if (auth.userId === event.creator) {
-      setShowConfirmModal(true);
-      setSelectedEvent(event);
-    } else {
-      toast.warn("Et voi poistaa muiden tekemiä varauksia ");
-    }
+    setSelectedEvent(event);
+    setShowInfoModal(true);
   };
 
   const cancelDeleteHandler = () => {
@@ -262,15 +266,19 @@ const Reservations = ({socket}) => {
       style: isSelected ? { ...style, ...hoverStyle } : style,
     };
   };
-  
-// Calendar view type
+
+  // Calendar view type
   const views = {
     month: true,
   };
-  
 
+  const confirmDelete = () => {
+    setShowInfoModal(false);
+    setShowConfirmModal(true);
+  };
   return (
     <div className="flex items-center justify-center pt-28 flex-col py-2 px-4 ">
+      {/* delete confimation modal */}
       <Modal
         show={showConfirmModal}
         onClose={cancelDeleteHandler}
@@ -298,6 +306,36 @@ const Reservations = ({socket}) => {
       >
         <p>Oletko varma että haluat poistaa varauksen?</p>
       </Modal>
+
+      {/* reservation info modal */}
+      <Modal
+        show={showInfoModal}
+        onClose={cancelDeleteHandler}
+        header="Varauksen tiedot"
+        footer={
+          <React.Fragment>
+            <div className="flex ">
+              <button
+                className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600"
+                onClick={() => setShowInfoModal(false)}
+              >
+                Peruuta
+              </button>
+              {auth.userId === selectedEvent.creator && (
+                <button
+                  className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-600 ml-2"
+                  onClick={confirmDelete}
+                >
+                  Poista varaus
+                </button>
+              )}
+            </div>
+          </React.Fragment>
+        }
+      >
+        <EventInfo selectedEvent={selectedEvent} />
+      </Modal>
+
       {isLoading && <LoadingSpinner asOverlay />}
       <div className="text-white mb-20 lg:px-52">
         <h1 className="text-4xl mb-5 ">Varaukset</h1>
@@ -321,37 +359,23 @@ const Reservations = ({socket}) => {
           Tee varaus
         </button>
       )}
+
+      {/* Reservation calendar  */}
       {showDatePicker && (
-        <React.Fragment>
-          {" "}
-          <DateRange
-            disabledDates={disabledDates}
-            locale={fi}
-            onChange={(item) => setSelectedDate([item.selection])}
-            moveRangeOnFirstSelection={false}
-            ranges={selectedDate}
-          />
-          <div className="flex items-end justify-center gap-2">
-            <button
-              className="my-4 px-4 py-2 text-lg font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600"
-              onClick={() => {
-                setShowDatePicker(false);
-              }}
-            >
-              Peruuta
-            </button>
-            <button
-              className="my-4 px-4 py-2 text-lg font-medium text-white bg-green-500 rounded-md hover:bg-green-600"
-              onClick={submitReservation}
-            >
-              Varaa
-            </button>
-          </div>
-        </React.Fragment>
+        <ReservationForm
+          setSelectedDate={setSelectedDate}
+          selectedDate={selectedDate}
+          submitReservation={submitReservation}
+          setShowDatePicker={setShowDatePicker}
+          description={description}
+          setDescription={setDescription}
+          disabledDates={disabledDates}
+        />
       )}
+
+      {/* Big calendar  */}
       <div className=" calendar mx-auto w-full lg:w-3/4 xl:w-2/4 mb-20">
         <Calendar
-        
           events={events}
           localizer={localizer}
           style={{ height: 600 }}

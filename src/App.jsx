@@ -30,11 +30,8 @@ function App() {
   const [name, setName] = useState("");
   const [socket, setSocket] = useState(null);
 
-  console.log(io)
   useEffect(() => {
     const newSocket = io(`${import.meta.env.VITE_SOCKETIO_URL}`, { transports: ['websocket'], forceNew: true, reconnectionAttempts: 3, timeout: 2000, })  
-
-  console.log(newSocket)
     // const newSocket = io("http://localhost:5000");
     setSocket(newSocket);
     return () => newSocket.close();
