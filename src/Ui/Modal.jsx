@@ -11,7 +11,6 @@ const ModalOverlay = (props) => {
   useEffect(() => {
     if (props.type === "reservation") {
       setShowDeleteButton(auth.userId === props.selectedEvent.creator);
-      console.log(auth.userId, props.selectedEvent.creator);
     } else if (props.type === "note") {
       setShowDeleteButton(auth.userId === props.noteCreator);
     }else if(props.type==="comment"){
