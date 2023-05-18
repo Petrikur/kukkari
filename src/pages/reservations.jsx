@@ -24,6 +24,7 @@ import { isSameDay } from "date-fns";
 import { CustomToolbar } from "../Ui/CustomToolbar";
 import ReservationForm from "../components/Reservations/ReservationForm";
 import EventInfo from "../components/Reservations/EventInfo";
+import HeadingInfo from "../components/Reservations/HeadingInfo";
 const Reservations = ({ socket }) => {
   const locales = {
     fi,
@@ -151,8 +152,6 @@ const Reservations = ({ socket }) => {
     setEvents(events);
   };
 
- 
-
   // Make new reservation
   const submitReservation = async (event) => {
     event.preventDefault();
@@ -183,7 +182,7 @@ const Reservations = ({ socket }) => {
           },
         }
       );
-      setDescription("")
+      setDescription("");
       setTimeout(() => {
         setLoadedReservations([
           ...loadedReservations,
@@ -282,27 +281,13 @@ const Reservations = ({ socket }) => {
       <Modal
         show={showConfirmModal}
         onClose={cancelDeleteHandler}
-        header="Oletko varma?"
-        footer={
-          <React.Fragment>
-            <div className="flex ">
-              <button
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600"
-                onClick={cancelDeleteHandler}
-              >
-                Peruuta
-              </button>
-              <button
-                className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-600 ml-2"
-                onClick={() => {
-                  handleDeleteEvent(selectedEvent._id);
-                }}
-              >
-                Poista
-              </button>
-            </div>
-          </React.Fragment>
-        }
+        header="Vahvista"
+        onCancel={() => {
+          cancelDeleteHandler(false);
+        }}
+        selectedEvent={selectedEvent}
+        onDelete={() => handleDeleteEvent(selectedEvent._id)}
+        type="reservation"
       >
         <p>Oletko varma että haluat poistaa varauksen?</p>
       </Modal>
@@ -312,44 +297,17 @@ const Reservations = ({ socket }) => {
         show={showInfoModal}
         onClose={cancelDeleteHandler}
         header="Varauksen tiedot"
-        footer={
-          <React.Fragment>
-            <div className="flex ">
-              <button
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600"
-                onClick={() => setShowInfoModal(false)}
-              >
-                Peruuta
-              </button>
-              {auth.userId === selectedEvent.creator && (
-                <button
-                  className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-600 ml-2"
-                  onClick={confirmDelete}
-                >
-                  Poista varaus
-                </button>
-              )}
-            </div>
-          </React.Fragment>
-        }
+        onDelete={confirmDelete}
+        onCancel={() => setShowInfoModal(false)}
+        selectedEvent={selectedEvent}
+        type={"reservation"}
       >
         <EventInfo selectedEvent={selectedEvent} />
       </Modal>
 
       {isLoading && <LoadingSpinner asOverlay />}
       <div className="text-white mb-20 lg:px-52">
-        <h1 className="text-4xl mb-5 ">Varaukset</h1>
-        <div className="text-md">
-          Voit tehdä varauksia painamalla tee varaus täällä. Alla olevassa
-          kalenterissa näät jo varatut ajat. Jos perut varamaamasi ajan, muista
-          poistaa varauksesi. Voit poistaa oman varauksesi klikkaamalla isosta
-          kalenterista varausta ja poistaa sen.
-        </div>
-        <div className="my-2">
-          Voit varata kerralla ajan joko yhdelle päivälle tai useammalle
-          päivälle. Useammalle päivälle varatessa klikkaa alkupäivämäärää ja sen
-          jälkeen loppupäivämäärää ja sitten varaa.
-        </div>
+        <HeadingInfo />
       </div>
       {!showDatePicker && (
         <button

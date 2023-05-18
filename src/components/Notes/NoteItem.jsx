@@ -1,5 +1,5 @@
 // NoteItem.jsx
-import React, { useState, useContext, useRef,useEffect } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import { AuthContext } from "../context/authContext";
 import Modal from "../../Ui/Modal";
 import axios from "axios";
@@ -64,7 +64,8 @@ export function LucideTrash2(props) {
 }
 const NoteItem = (props) => {
   const auth = useContext(AuthContext);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showNoteConfirmModal, setShowNoteConfirmModal] = useState(false);
+  const [showCommentConfirmModal, setShowCommentConfirmModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [comment, setComment] = useState("");
@@ -73,7 +74,6 @@ const NoteItem = (props) => {
   const [createdAt, setCreatedAt] = useState(
     new Date(Date.parse(props.createdAt))
   );
-  const [newComment, setNewComment] = useState(null);
 
   useEffect(() => {
     props.socket.on("newComment", (newComment) => {
@@ -81,23 +81,31 @@ const NoteItem = (props) => {
         setComments((prevComments) => [...prevComments, newComment]);
       }
     });
-  
-    props.socket.on(`deleteComment`, ({id}) => {
-      setComments((prevComments) => prevComments.filter(comment => comment.id !== id));
+
+    props.socket.on(`deleteComment`, ({ id }) => {
+      setComments((prevComments) =>
+        prevComments.filter((comment) => comment.id !== id)
+      );
     });
     return () => {
       props.socket.off(`newComment`);
       props.socket.off(`deleteComment`);
-      props.socket.off('updateNote');
+      props.socket.off("updateNote");
     };
   }, [props.id, props.socket]);
 
   const showDeleteWarningHandler = () => {
-    setShowConfirmModal(true);
+    setShowNoteConfirmModal(true);
+  };
+
+  const deleteCommentConfirm = (comment) => {
+    setComment(comment._id);
+    setShowCommentConfirmModal(true);
   };
 
   const cancelDeleteHandler = () => {
-    setShowConfirmModal(false);
+    setShowCommentConfirmModal(false);
+    setShowNoteConfirmModal(false);
   };
 
   const confirmDeleteHandler = async () => {
@@ -118,11 +126,9 @@ const NoteItem = (props) => {
       const errorMessage = err.response.data.message;
       toast.warn(errorMessage);
       console.log(err);
-  
-    }
-    finally{
-      setIsLoading(false)
-      setShowConfirmModal(false);
+    } finally {
+      setIsLoading(false);
+      setShowNoteConfirmModal(false);
     }
   };
 
@@ -147,7 +153,7 @@ const NoteItem = (props) => {
       author: auth.userId,
       noteId: props.noteId,
       authorName: auth.name,
-    }
+    };
 
     if (comment.trim() === "") {
       return;
@@ -186,52 +192,60 @@ const NoteItem = (props) => {
   const handleCommentDelete = async (id) => {
     try {
       setIsLoading(true);
-      await axios.delete(`${import.meta.env.VITE_SERVER_URL}` + `/comments/${id}`, {
-        headers: {
-          Authorization: "Bearer " + auth.token,
-        },
-      });
-      setComments((prevComments) => prevComments.filter(comment => comment._id !== id));
-      props.socket.emit("deleteComment", { noteId: props.id, id: id  });
+      await axios.delete(
+        `${import.meta.env.VITE_SERVER_URL}` + `/comments/${id}`,
+        {
+          headers: {
+            Authorization: "Bearer " + auth.token,
+          },
+        }
+      );
+      setComments((prevComments) =>
+        prevComments.filter((comment) => comment._id !== id)
+      );
+      props.socket.emit("deleteComment", { noteId: props.id, id: id });
       toast.success("Kommentti poistettu!");
+      setComment("");
     } catch (err) {
-      const errorMessage = err.response.data.message
+      const errorMessage = err.response.data.message;
       toast.warn(errorMessage);
       console.log(errorMessage);
-    }
-    finally{
-      setIsLoading(false)
+    } finally {
+      setIsLoading(false);
+      setShowCommentConfirmModal(false);
     }
   };
-  
+
   return (
     <React.Fragment>
+      {/* Confirm deletion modal  */}
       {isLoading && <LoadingSpinner />}
       <Modal
-        show={showConfirmModal}
+        show={showNoteConfirmModal}
         onClose={cancelDeleteHandler}
         header="Oletko varma?"
-        footer={
-          <React.Fragment>
-            <div className="flex ">
-              <button
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600"
-                onClick={cancelDeleteHandler}
-              >
-                Peruuta
-              </button>
-              <button
-                className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-600 ml-2"
-                onClick={confirmDeleteHandler}
-              >
-                Poista
-              </button>
-            </div>
-          </React.Fragment>
-        }
+        onCancel={cancelDeleteHandler}
+        onDelete={confirmDeleteHandler}
+        type="note"
+        noteCreator={props.creator}
       >
         <p>Oletko varma että haluat poistaa muistiinpanon?</p>
       </Modal>
+
+      {/* Comment delete confirm modal */}
+      <Modal
+        show={showCommentConfirmModal}
+        onClose={cancelDeleteHandler}
+        header="Poista kommentti?"
+        onCancel={cancelDeleteHandler}
+        onDelete={() => {
+          handleCommentDelete(comment);
+        }}
+        type={"comment"}
+      >
+        <p>Vahvista kommentin poisto.</p>
+      </Modal>
+
       <li
         ref={listItemRef}
         className="border rounded-lg shadow-md p-6 mb-4 bg-gray-700 border-white shadow-slate-700 break overflow-auto"
@@ -259,7 +273,6 @@ const NoteItem = (props) => {
           className="shadow-md p-6 mb-4 bg-gray-700 shadow-slate-700 break "
         >
           {comments.map((comment, index) => {
-            
             const formattedDate = new Date(comment.createdAt).toLocaleString(
               "fi-FI",
               {
@@ -279,7 +292,6 @@ const NoteItem = (props) => {
                   <div className="text-white font-sm mb-1  text-md">
                     {comment.authorName} --- {formattedDate}
                   </div>
-               
 
                   <div className="mr-4 bg-gray-100 shadow-md p-4 rounded-lg max-w-xl">
                     <p className="text-gray-600 text-sm whitespace-pre-line">
@@ -292,7 +304,7 @@ const NoteItem = (props) => {
                 {comment.author === auth.userId && (
                   <button
                     onClick={() => {
-                      handleCommentDelete(comment._id);
+                      deleteCommentConfirm(comment);
                     }}
                     className="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-md"
                   >
