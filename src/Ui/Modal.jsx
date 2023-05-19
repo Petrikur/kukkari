@@ -9,14 +9,18 @@ const ModalOverlay = (props) => {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
 
   useEffect(() => {
-    if (props.type === "reservation") {
-      setShowDeleteButton(auth.userId === props.selectedEvent.creator);
-    } else if (props.type === "note") {
-      setShowDeleteButton(auth.userId === props.noteCreator);
-    }else if(props.type==="comment"){
-      setShowDeleteButton(true)
+
+  
+    if (props.selectedEvent?.creator || props.noteCreator || props.type === "comment") {
+      if (props.type === "reservation" && props.selectedEvent) {
+        setShowDeleteButton(auth.userId === props.selectedEvent.creator);
+      } else if (props.type === "note" && props.noteCreator) {
+        setShowDeleteButton(auth.userId === props.noteCreator);
+      } else if (props.type === "comment") {
+        setShowDeleteButton(true);
+      }
     }
-  }, [props.selectedEvent,props.noteCreator]);
+  }, [props]);
 
   const content = (
     <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 sm:w-96 md:w-120 ">

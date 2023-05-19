@@ -157,6 +157,17 @@ const Reservations = ({ socket }) => {
     event.preventDefault();
 
     // make this check because we are defaulting current date to selected date when opening calendar
+    const selectedStartDate = selectedDate[0].startDate;
+    const selectedEndDate = selectedDate[0].endDate;
+
+    const isSameDayReserved = disabledDates.some((date) =>
+    isSameDay(date, selectedStartDate)
+  );
+
+  if (isSameDayReserved) {
+    toast.warn("Joku on jo varannut tämän päivän");
+    return;
+  }
     if (
       isToday(selectedDate[0].startDate) &&
       disabledDates.some((date) => isSameDay(date, selectedDate[0].startDate))
@@ -244,37 +255,45 @@ const Reservations = ({ socket }) => {
   };
 
   // style event
-  const eventStyleGetter = (event, start, end, isSelected) => {
-    const backgroundColor = isSelected ? "blue" : "red";
-    const hoverStyle = {
-      backgroundColor: "orange",
-      cursor: "pointer",
-    };
-    const style = {
-      backgroundColor,
-      borderRadius: "0px",
-      opacity: 0.8,
-      color: "white",
-      border: "0px",
-      display: "block",
-      fontSize: "14px",
-      padding: "8px",
-    };
-
-    return {
-      style: isSelected ? { ...style, ...hoverStyle } : style,
-    };
+  
+ const eventStyleGetter = (event, start, end, isSelected) => {
+  const backgroundColor ="red";
+  const hoverStyle = {
+    backgroundColor: "orange",
+    cursor: "pointer",
+  };
+  const style = {
+    backgroundColor,
+    opacity: 0.8,
+    color: "white",
+    display: "block",
+    fontSize: "16px",
+    padding: "12px",
+    border: "1px dotted black",
+    borderRadius: "5px"
   };
 
-  // Calendar view type
-  const views = {
-    month: true,
+  return {
+    style: isSelected  && selectedEvent  ? { ...style, ...hoverStyle } : style,
   };
+};
 
-  const confirmDelete = () => {
-    setShowInfoModal(false);
-    setShowConfirmModal(true);
-  };
+// Calendar view type
+const views = {
+  month: true,
+};
+
+const confirmDelete = () => {
+  setShowInfoModal(false);
+  setShowConfirmModal(true);
+};
+
+const handleCancelInfo = () => {
+  setSelectedEvent(null)
+  setShowInfoModal(false)
+
+}
+
   return (
     <div className="flex items-center justify-center pt-28 flex-col py-2 px-4 ">
       {/* delete confimation modal */}
@@ -298,11 +317,11 @@ const Reservations = ({ socket }) => {
         onClose={cancelDeleteHandler}
         header="Varauksen tiedot"
         onDelete={confirmDelete}
-        onCancel={() => setShowInfoModal(false)}
+        onCancel={ handleCancelInfo}
         selectedEvent={selectedEvent}
         type={"reservation"}
       >
-        <EventInfo selectedEvent={selectedEvent} />
+        { selectedEvent && <EventInfo selectedEvent={selectedEvent} />}
       </Modal>
 
       {isLoading && <LoadingSpinner asOverlay />}

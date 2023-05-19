@@ -6,9 +6,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
-
-const NewNote = ({socket}) => {
+const NewNote = ({ socket }) => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +23,7 @@ const NewNote = ({socket}) => {
       description: formState.description,
       name: auth.name,
       userId: auth.userId,
-      comments:[]
+      comments: [],
     };
     try {
       const response = await axios.post(
@@ -42,9 +40,9 @@ const NewNote = ({socket}) => {
       setTimeout(() => {
         toast.success("Muistiinpano lisätty");
       }, 700);
-      navigate("/maintenance");
+       navigate("/maintenance");
     } catch (err) {
-      const errorMessage = err
+      const errorMessage = err.response.data.message
       toast.warn(errorMessage);
       setIsLoading(false);
       console.log(err);

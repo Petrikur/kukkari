@@ -22,21 +22,22 @@ const NotesList = ({ items, searchQuery, onDeleteNote,socket }) => {
   }
   return (
     <ul className="list-none flex items-center flex-row-reverse justify-center px-4 flex-wrap-reverse gap-10 mt-12">
-      {filteredNotes.map((note) => (
-        <NoteItem
-          key={note.id}
-          id={note.id}
-          title={note.title}
-          description={note.description}
-          creator={note.creator}
-          onDeleteNote={onDeleteNote}
-          name={note.name}
-          createdAt={note.createdAt}
-          comments={note.comments}
-          socket={socket}
-          noteId={note._id}
-        />
-      ))}
+      {filteredNotes.map((note) =>{
+        return (
+       <NoteItem
+         key={note._id} 
+         id={note._id}
+         title={note.title}
+         description={note.description}
+         creator={note.creator}
+         name={note.name}
+         createdAt={note.createdAt}
+         comments={note.comments}
+         socket={socket}
+         noteId={note._id}
+       />
+     )
+      } )}
     </ul>
   );
 };

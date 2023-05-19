@@ -33,33 +33,41 @@ const NotesPage = ({ socket }) => {
     getNotes();
   }, []);
 
+  const handleNewNote = ({ note }) => {
+    setLoadedNotes((prevNotes) => [...prevNotes, note]);
+  };
+  
+  const handleDeleteNote = ({ id }) => {
+
+    setLoadedNotes((prevNotes) =>
+      prevNotes.filter((note) => note._id !== id)
+    );
+  };
+  
+  const handleUpdateNote = ({ noteId, note }) => {
+    setLoadedNotes((prevNotes) => {
+      const updatedNotes = prevNotes.map((prevNote) => {
+        if (prevNote._id === noteId) {
+          return { ...prevNote, ...note };
+        } else {
+          return prevNote;
+        }
+      });
+      return updatedNotes;
+    });
+  };
+  
   useEffect(() => {
-    socket.on("newNote", (newNote) => {
-      setTimeout(() => {
-        setLoadedNotes((prevNotes) => [...prevNotes, newNote]);
-      }, 2000);
-    });
-
-    socket.on("deleteNote", ({ id }) => {
-      setLoadedNotes((prevNotes) =>
-        prevNotes.filter((note) => note._id !== id)
-      );
-    });
-    socket.on("updateNote", ({ noteId, note }) => {
-      setLoadedNotes(prevNotes =>
-        prevNotes.map(prevNote =>
-          prevNote.id === noteId ? { ...prevNote, ...note } : prevNote
-        )
-      );
-    });
-
+    socket.on("newNoteAdd", handleNewNote);
+    socket.on("deleteNote", handleDeleteNote);
+    socket.on("updateNote", handleUpdateNote);
     return () => {
-      socket.off(`newNote`);
-      socket.off("updateNote");
-      socket.off("deleteNote");
+      socket.off("newNoteAdd", handleNewNote);
+      socket.off("deleteNote", handleDeleteNote);
+      socket.off("updateNote", handleUpdateNote);
     };
-   }, []);
-
+  }, []);
+  
   // required to assign id so that new note is commetable without reload and assign new comment
   useEffect(() => {
     if (loadedNotes) {
@@ -67,7 +75,8 @@ const NotesPage = ({ socket }) => {
         const noteIndex = loadedNotes.findIndex((note) => note._id === data.noteId);
         if (noteIndex !== -1) {
           const updatedNote = { ...loadedNotes[noteIndex] };
-          updatedNote.id = data.noteId
+          updatedNote._id = data.noteId; 
+          updatedNote.id = data.noteId;
           updatedNote.comments = [...updatedNote.comments, data.comment];
           const updatedNotes = [...loadedNotes];
           updatedNotes[noteIndex] = updatedNote;
@@ -75,7 +84,11 @@ const NotesPage = ({ socket }) => {
         }
       });
     }
-  }, [loadedNotes]);
+    return () => {
+      socket.off("updateNoteTest");
+    };
+  }, []);
+  
 
   if (isLoading) {
     return (
@@ -84,11 +97,6 @@ const NotesPage = ({ socket }) => {
       </div>
     );
   }
-  const noteDeletedHandler = (deletedNoteId) => {
-    setLoadedNotes((prevNotes) =>
-      prevNotes.filter((note) => note.id !== deletedNoteId)
-    );
-  };
 
   return (
     <>
@@ -134,7 +142,6 @@ const NotesPage = ({ socket }) => {
             <NotesList
               searchQuery={searchQuery}
               items={loadedNotes}
-              onDeleteNote={noteDeletedHandler}
               socket={socket}
             />
           </div>

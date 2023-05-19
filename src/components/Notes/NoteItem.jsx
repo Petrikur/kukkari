@@ -76,24 +76,28 @@ const NoteItem = (props) => {
   );
 
   useEffect(() => {
-    props.socket.on("newComment", (newComment) => {
-      if (newComment && newComment.noteId === props.id) {
-        setComments((prevComments) => [...prevComments, newComment]);
-      }
-    });
-
-    props.socket.on(`deleteComment`, ({ id }) => {
-      setComments((prevComments) =>
-        prevComments.filter((comment) => comment.id !== id)
-      );
-    });
+    props.socket.on("newComment", handleNewComment);
+    props.socket.on("deleteComment", handleDeleteComment);
+  
     return () => {
-      props.socket.off(`newComment`);
-      props.socket.off(`deleteComment`);
-      props.socket.off("updateNote");
+      props.socket.off("newComment", handleNewComment);
+      props.socket.off("deleteComment", handleDeleteComment);
     };
-  }, [props.id, props.socket]);
-
+  }, []);
+  
+  //  Socket listener functions 
+  const handleNewComment = (newComment) => {
+    if (newComment && newComment.noteId === props.noteId) {
+      setComments((prevComments) => [...prevComments, newComment]);
+    }
+  };
+ 
+  const handleDeleteComment = ({ id }) => {
+    setComments((prevComments) =>
+      prevComments.filter((comment) => comment._id !== id)
+    );
+  };
+ 
   const showDeleteWarningHandler = () => {
     setShowNoteConfirmModal(true);
   };
@@ -119,16 +123,14 @@ const NoteItem = (props) => {
           },
         }
       );
-      setIsLoading(false);
-      setComments(comments.filter((comment) => comment.noteId !== props.id));
+      setComments(comments.filter((comment) => comment.noteId !== props._id));
       toast.success("Muistiinpano poistettu!");
     } catch (err) {
-      const errorMessage = err.response.data.message;
+      const errorMessage = err.response.data.message
       toast.warn(errorMessage);
       console.log(err);
     } finally {
       setIsLoading(false);
-      setShowNoteConfirmModal(false);
     }
   };
 
@@ -170,16 +172,10 @@ const NoteItem = (props) => {
           },
         }
       );
-
-      setIsLoading(false);
-      if (!props.comments) {
-        props.comments = [];
-      }
       setShowCommentInput(false);
-      setComment("");
       toast.success("Kommentti luotu!");
     } catch (err) {
-      const errorMessage = err;
+      const errorMessage = err.response.data.message
       toast.dismiss();
       toast.warn(errorMessage);
       console.log(err);
@@ -203,7 +199,6 @@ const NoteItem = (props) => {
       setComments((prevComments) =>
         prevComments.filter((comment) => comment._id !== id)
       );
-      props.socket.emit("deleteComment", { noteId: props.id, id: id });
       toast.success("Kommentti poistettu!");
       setComment("");
     } catch (err) {
@@ -269,11 +264,11 @@ const NoteItem = (props) => {
 
         {/* Comments  */}
         <div
-          key={props.id}
+          key={props._id}
           className="shadow-md p-6 mb-4 bg-gray-700 shadow-slate-700 break "
         >
           {comments.map((comment, index) => {
-            const formattedDate = new Date(comment.createdAt).toLocaleString(
+         const formattedDate = new Date(comment.createdAt).toLocaleString(
               "fi-FI",
               {
                 year: "numeric",
@@ -285,7 +280,7 @@ const NoteItem = (props) => {
             );
             return (
               <div
-                key={`${comment.id}-${index}`}
+                key={`${comment._id}-${index}`}
                 className="mb-4 flex items-center justify-between"
               >
                 <div className="flex-grow max-w-full">
@@ -344,6 +339,7 @@ const NoteItem = (props) => {
             </div>
           </form>
         ) : (
+        
           <div className="mt-5 flex flex-col items-center justify-between sm:flex-row gap-4 ">
             <button
               onClick={handleAddCommentClick}
