@@ -21,7 +21,7 @@ const NotesList = ({ items, searchQuery, onDeleteNote,socket }) => {
     );
   }
   return (
-    <ul className="list-none flex items-center flex-row-reverse justify-center px-4 flex-wrap-reverse gap-10 mt-12">
+    <ul className="list-none flex md:w-full md:h-full w-full items-center flex-row-reverse justify-center px-4 flex-wrap-reverse gap-10 mt-12">
       {filteredNotes.map((note) =>{
         return (
        <NoteItem

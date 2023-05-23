@@ -1,4 +1,5 @@
 import React from "react";
+import { MdToday, MdPerson } from "react-icons/md";
 
 const EventInfo = ({ selectedEvent }) => {
   const startDate = new Date(selectedEvent.start);
@@ -6,11 +7,11 @@ const EventInfo = ({ selectedEvent }) => {
   const isSingleDayEvent = startDate.getTime() === endDate.getTime();
 
   const formatDate = (date) => {
-    return `${date.getDate()} ${date.toLocaleString("default", { month: "short" })}`;
+    return `${date.getDate()} ${date.toLocaleString("default", { month: "long" })}`;
   };
 
   const formatFullDate = (date) => {
-    return `${date.getDate()} ${date.toLocaleString("default", { month: "short" })} ${date.getFullYear()}`;
+    return `${date.getDate()} ${date.toLocaleString("default", { month: "long" })} ${date.getFullYear()}`;
   };
 
   const formattedStartDate = formatFullDate(startDate);
@@ -20,18 +21,24 @@ const EventInfo = ({ selectedEvent }) => {
 
   return (
     <div className="flex flex-col">
-      <div className="text-center font-bold text-2xl">Varaaja</div>
-      <div className="text-center font-bold pb-10">{selectedEvent.name}</div>
-      <div className="text-center font-bold text-2xl">Lisätiedot</div>
-      <div className="text-center font-bold">{selectedEvent.description}</div>
-      <div className="text-center font-bold mt-4">
-        {isSingleDayEvent ? (
-          formattedStartDate
-        ) : (
-          <>
-            {startDate.getDate()} {showMonth && startDate.toLocaleString("default", { month: "short" })} - {formattedEndDate} {showYear && startDate.getFullYear()}
-          </>
-        )}
+      <div className="text-xl text-white ">Varaaja</div>
+      <div className="bg-white rounded p-4 flex items-center mt-2 mb-6">
+        <MdPerson size={24} color="black" className="mr-2" />
+        <div className="text-lg ">{selectedEvent.name}</div>
+      </div>
+      <div className="text-xl text-white ">Lisätiedot</div>
+      <div className="mt-4 p-4 bg-white rounded-lg">
+        <div className="flex items-center mb-4">
+          <MdToday size={24} color="black" className="mr-2" />
+          {isSingleDayEvent ? (
+            formattedStartDate
+          ) : (
+            <div className="">
+              {startDate.getDate()} {showMonth && startDate.toLocaleString("default", { month: "long" })} - {formattedEndDate} {showYear && startDate.getFullYear()}
+            </div>
+          )}
+        </div>
+        <div className="">{selectedEvent.description}</div>
       </div>
     </div>
   );

@@ -25,6 +25,7 @@ import { CustomToolbar } from "../Ui/CustomToolbar";
 import ReservationForm from "../components/Reservations/ReservationForm";
 import EventInfo from "../components/Reservations/EventInfo";
 import HeadingInfo from "../components/Reservations/HeadingInfo";
+import AllReservationsList from "../components/Reservations/AllReservationsList";
 const Reservations = ({ socket }) => {
   const locales = {
     fi,
@@ -118,7 +119,6 @@ const Reservations = ({ socket }) => {
     setDisabledDates(disabled);
   };
 
-  // Open reservation calendar when button click
   const openCalendar = () => {
     setShowDatePicker(true);
   };
@@ -161,13 +161,13 @@ const Reservations = ({ socket }) => {
     const selectedEndDate = selectedDate[0].endDate;
 
     const isSameDayReserved = disabledDates.some((date) =>
-    isSameDay(date, selectedStartDate)
-  );
+      isSameDay(date, selectedStartDate)
+    );
 
-  if (isSameDayReserved) {
-    toast.warn("Joku on jo varannut tämän päivän");
-    return;
-  }
+    if (isSameDayReserved) {
+      toast.warn("Joku on jo varannut tämän päivän");
+      return;
+    }
     if (
       isToday(selectedDate[0].startDate) &&
       disabledDates.some((date) => isSameDay(date, selectedDate[0].startDate))
@@ -254,118 +254,126 @@ const Reservations = ({ socket }) => {
     setShowConfirmModal(false);
   };
 
-  // style event
-  
- const eventStyleGetter = (event, start, end, isSelected) => {
-  const backgroundColor ="red";
-  const hoverStyle = {
-    backgroundColor: "orange",
-    cursor: "pointer",
+  const eventStyleGetter = (event, start, end, isSelected) => {
+    const backgroundColor = "red";
+    const hoverStyle = {
+      backgroundColor: "orange",
+      cursor: "pointer",
+    };
+    const style = {
+      backgroundColor,
+      opacity: 0.8,
+      color: "white",
+      display: "block",
+      fontSize: "16px",
+      padding: "12px",
+      border: "1px dotted black",
+      borderRadius: "5px",
+    };
+
+    return {
+      style: isSelected && selectedEvent ? { ...style, ...hoverStyle } : style,
+    };
   };
-  const style = {
-    backgroundColor,
-    opacity: 0.8,
-    color: "white",
-    display: "block",
-    fontSize: "16px",
-    padding: "12px",
-    border: "1px dotted black",
-    borderRadius: "5px"
+
+  // Calendar view type
+  const views = {
+    month: true,
   };
 
-  return {
-    style: isSelected  && selectedEvent  ? { ...style, ...hoverStyle } : style,
+  const confirmDelete = () => {
+    setShowInfoModal(false);
+    setShowConfirmModal(true);
   };
-};
 
-// Calendar view type
-const views = {
-  month: true,
-};
-
-const confirmDelete = () => {
-  setShowInfoModal(false);
-  setShowConfirmModal(true);
-};
-
-const handleCancelInfo = () => {
-  setSelectedEvent(null)
-  setShowInfoModal(false)
-
-}
+  const handleCancelInfo = () => {
+    setSelectedEvent(null);
+    setShowInfoModal(false);
+  };
 
   return (
-    <div className="flex items-center justify-center pt-28 flex-col py-2 px-4 ">
-      {/* delete confimation modal */}
-      <Modal
-        show={showConfirmModal}
-        onClose={cancelDeleteHandler}
-        header="Vahvista"
-        onCancel={() => {
-          cancelDeleteHandler(false);
-        }}
-        selectedEvent={selectedEvent}
-        onDelete={() => handleDeleteEvent(selectedEvent._id)}
-        type="reservation"
-      >
-        <p>Oletko varma että haluat poistaa varauksen?</p>
-      </Modal>
-
-      {/* reservation info modal */}
-      <Modal
-        show={showInfoModal}
-        onClose={cancelDeleteHandler}
-        header="Varauksen tiedot"
-        onDelete={confirmDelete}
-        onCancel={ handleCancelInfo}
-        selectedEvent={selectedEvent}
-        type={"reservation"}
-      >
-        { selectedEvent && <EventInfo selectedEvent={selectedEvent} />}
-      </Modal>
-
-      {isLoading && <LoadingSpinner asOverlay />}
-      <div className="text-white mb-20 lg:px-52">
-        <HeadingInfo />
-      </div>
-      {!showDatePicker && (
-        <button
-          className="my-4 px-4 py-2 text-lg font-medium text-white bg-green-500 rounded-md hover:bg-green-600"
-          onClick={openCalendar}
-        >
-          Tee varaus
-        </button>
-      )}
-
-      {/* Reservation calendar  */}
-      {showDatePicker && (
-        <ReservationForm
-          setSelectedDate={setSelectedDate}
-          selectedDate={selectedDate}
-          submitReservation={submitReservation}
-          setShowDatePicker={setShowDatePicker}
-          description={description}
-          setDescription={setDescription}
-          disabledDates={disabledDates}
-        />
-      )}
-
-      {/* Big calendar  */}
-      <div className=" calendar mx-auto w-full lg:w-3/4 xl:w-2/4 mb-20">
-        <Calendar
-          events={events}
-          localizer={localizer}
-          style={{ height: 600 }}
-          onSelectEvent={handleEventClick}
-          eventPropGetter={eventStyleGetter}
-          views={views}
-          components={{
-            toolbar: CustomToolbar,
+    <>
+      <div className="flex items-center justify-center pt-28 flex-col py-2 px-4 ">
+        {/* delete confimation modal */}
+        <Modal
+          modalType={"delete"}
+          show={showConfirmModal}
+          onClose={cancelDeleteHandler}
+          header="Vahvista"
+          onCancel={() => {
+            cancelDeleteHandler(false);
           }}
-        />
+          selectedEvent={selectedEvent}
+          onDelete={() => handleDeleteEvent(selectedEvent._id)}
+          type="reservation"
+        >
+          <p className="text-white">
+            Oletko varma että haluat poistaa varauksen?
+          </p>
+        </Modal>
+        {/* reservation info modal */}
+        <Modal
+          modalType={"info"}
+          show={showInfoModal}
+          onClose={cancelDeleteHandler}
+          header="Varauksen tiedot"
+          onDelete={confirmDelete}
+          onCancel={handleCancelInfo}
+          selectedEvent={selectedEvent}
+          type={"reservation"}
+        >
+          {selectedEvent && <EventInfo selectedEvent={selectedEvent} />}
+        </Modal>
+        {isLoading && <LoadingSpinner asOverlay />}
+        <div className="text-white mb-20 lg:px-52 lg:ml-20">
+          <HeadingInfo />
+        </div>
+        {!showDatePicker && (
+          <button
+            className="my-4 px-4 py-2 text-lg font-medium text-white bg-green-500 rounded-md hover:bg-green-600"
+            onClick={openCalendar}
+          >
+            Tee varaus
+          </button>
+        )}
+        {/* Reservation calendar  */}
+        {showDatePicker && (
+          <ReservationForm
+            setSelectedDate={setSelectedDate}
+            selectedDate={selectedDate}
+            submitReservation={submitReservation}
+            setShowDatePicker={setShowDatePicker}
+            description={description}
+            setDescription={setDescription}
+            disabledDates={disabledDates}
+          />
+        )}
+        {/* Big calendar  */}
+        <div className=" calendar mx-auto w-full lg:w-3/4 xl:w-2/4 mb-20">
+          <Calendar
+            events={events}
+            localizer={localizer}
+            style={{ height: 600 }}
+            onSelectEvent={handleEventClick}
+            eventPropGetter={eventStyleGetter}
+            views={views}
+            components={{
+              toolbar: CustomToolbar,
+            }}
+          />
+        </div>{" "}
+        <div className="lg:fixed top-0 left-0 lg:mt-20">
+          <AllReservationsList
+            events={events}
+            confirmDelete={confirmDelete}
+            showConfirmModal={showConfirmModal}
+            handleDeleteEvent={handleDeleteEvent}
+            setShowConfirmModal={setShowConfirmModal}
+          />
+        </div>
+        <ToastContainer />
       </div>
-      <ToastContainer />
-    </div>
+    </>
   );
 };
 export default Reservations;

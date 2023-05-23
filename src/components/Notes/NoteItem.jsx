@@ -78,26 +78,26 @@ const NoteItem = (props) => {
   useEffect(() => {
     props.socket.on("newComment", handleNewComment);
     props.socket.on("deleteComment", handleDeleteComment);
-  
+
     return () => {
       props.socket.off("newComment", handleNewComment);
       props.socket.off("deleteComment", handleDeleteComment);
     };
   }, []);
-  
-  //  Socket listener functions 
+
+  //  Socket listener functions
   const handleNewComment = (newComment) => {
     if (newComment && newComment.noteId === props.noteId) {
       setComments((prevComments) => [...prevComments, newComment]);
     }
   };
- 
+
   const handleDeleteComment = ({ id }) => {
     setComments((prevComments) =>
       prevComments.filter((comment) => comment._id !== id)
     );
   };
- 
+
   const showDeleteWarningHandler = () => {
     setShowNoteConfirmModal(true);
   };
@@ -126,7 +126,7 @@ const NoteItem = (props) => {
       setComments(comments.filter((comment) => comment.noteId !== props._id));
       toast.success("Muistiinpano poistettu!");
     } catch (err) {
-      const errorMessage = err.response.data.message
+      const errorMessage = err.response.data.message;
       toast.warn(errorMessage);
       console.log(err);
     } finally {
@@ -175,7 +175,7 @@ const NoteItem = (props) => {
       setShowCommentInput(false);
       toast.success("Kommentti luotu!");
     } catch (err) {
-      const errorMessage = err.response.data.message
+      const errorMessage = err.response.data.message;
       toast.dismiss();
       toast.warn(errorMessage);
       console.log(err);
@@ -223,8 +223,11 @@ const NoteItem = (props) => {
         onDelete={confirmDeleteHandler}
         type="note"
         noteCreator={props.creator}
+        modalType={"delete"}
       >
-        <p>Oletko varma että haluat poistaa muistiinpanon?</p>
+        <p className="text-white">
+          Oletko varma että haluat poistaa muistiinpanon?
+        </p>
       </Modal>
 
       {/* Comment delete confirm modal */}
@@ -237,18 +240,36 @@ const NoteItem = (props) => {
           handleCommentDelete(comment);
         }}
         type={"comment"}
+        modalType={"delete"}
       >
         <p>Vahvista kommentin poisto.</p>
       </Modal>
 
       <li
         ref={listItemRef}
-        className="border rounded-lg shadow-md p-6 mb-4 bg-gray-700 border-white shadow-slate-700 break overflow-auto"
+        className="border rounded-lg shadow-md md:w-1/4 w-full p-6 mb-4 bg-gray-700 border-white shadow-slate-700 break overflow-auto"
       >
         <div className="mb-4 whitespace-normal max-w-xl">
-          <h2 className="text-lg text-white font-bold mb-2 underline underline-offset-2">
-            {props.title}
-          </h2>
+          <div className="flex flex-row items-center justify-between mb-10 ">
+            <h2 className="text-lg text-white font-bold mb-2 underline underline-offset-2 flex-wrap">
+              {props.title}
+            </h2>
+
+            <div className=" text-sm text-white mt-3 justify-center flex items-center gap-3 ">
+              <MaterialSymbolsAccountCircle className=" w-6 h-6" />
+              {props.name}
+              <div>
+                {createdAt.toLocaleString("fi-FI", {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                })}
+              </div>
+            </div>
+          </div>
+
           <div className="text-white whitespace-pre-line flex flex-wrap ">
             {" "}
             {props.description}
@@ -256,19 +277,13 @@ const NoteItem = (props) => {
         </div>
         <hr></hr>
 
-        <div className=" text-sm text-white mt-3 justify-center flex items-center gap-3 ">
-          <MaterialSymbolsAccountCircle className=" w-6 h-6" />
-          Jättänyt: {props.name} -
-          <div>{createdAt.toLocaleDateString("fi-FI")}</div>
-        </div>
-
         {/* Comments  */}
         <div
           key={props._id}
           className="shadow-md p-6 mb-4 bg-gray-700 shadow-slate-700 break "
         >
           {comments.map((comment, index) => {
-         const formattedDate = new Date(comment.createdAt).toLocaleString(
+            const formattedDate = new Date(comment.createdAt).toLocaleString(
               "fi-FI",
               {
                 year: "numeric",
@@ -339,7 +354,6 @@ const NoteItem = (props) => {
             </div>
           </form>
         ) : (
-        
           <div className="mt-5 flex flex-col items-center justify-between sm:flex-row gap-4 ">
             <button
               onClick={handleAddCommentClick}
