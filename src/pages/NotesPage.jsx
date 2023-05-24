@@ -28,7 +28,7 @@ const NotesPage = ({ socket }) => {
       setIsLoading(false);
     }
   };
-  
+
   useEffect(() => {
     getNotes();
   }, []);
@@ -36,14 +36,11 @@ const NotesPage = ({ socket }) => {
   const handleNewNote = ({ note }) => {
     setLoadedNotes((prevNotes) => [...prevNotes, note]);
   };
-  
-  const handleDeleteNote = ({ id }) => {
 
-    setLoadedNotes((prevNotes) =>
-      prevNotes.filter((note) => note._id !== id)
-    );
+  const handleDeleteNote = ({ id }) => {
+    setLoadedNotes((prevNotes) => prevNotes.filter((note) => note._id !== id));
   };
-  
+
   const handleUpdateNote = ({ noteId, note }) => {
     setLoadedNotes((prevNotes) => {
       const updatedNotes = prevNotes.map((prevNote) => {
@@ -56,7 +53,7 @@ const NotesPage = ({ socket }) => {
       return updatedNotes;
     });
   };
-  
+
   useEffect(() => {
     socket.on("newNoteAdd", handleNewNote);
     socket.on("deleteNote", handleDeleteNote);
@@ -67,15 +64,17 @@ const NotesPage = ({ socket }) => {
       socket.off("updateNote", handleUpdateNote);
     };
   }, []);
-  
+
   // required to assign id so that new note is commetable without reload and assign new comment
   useEffect(() => {
     if (loadedNotes) {
       socket.on("updateNoteTest", (data) => {
-        const noteIndex = loadedNotes.findIndex((note) => note._id === data.noteId);
+        const noteIndex = loadedNotes.findIndex(
+          (note) => note._id === data.noteId
+        );
         if (noteIndex !== -1) {
           const updatedNote = { ...loadedNotes[noteIndex] };
-          updatedNote._id = data.noteId; 
+          updatedNote._id = data.noteId;
           updatedNote.id = data.noteId;
           updatedNote.comments = [...updatedNote.comments, data.comment];
           const updatedNotes = [...loadedNotes];
@@ -88,14 +87,9 @@ const NotesPage = ({ socket }) => {
       socket.off("updateNoteTest");
     };
   }, []);
-  
 
   if (isLoading) {
-    return (
-      <div className="">
-        <LoadingSpinner />
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   return (
@@ -110,13 +104,12 @@ const NotesPage = ({ socket }) => {
           <div className="text-white mb-20 ">
             <h1 className="text-4xl mb-5 ">Muistiinpanot</h1>
             <div className="text-md">
-              Voit tehdä täällä muistiinpanoja tällä sivulla sekä kirjoittaa
+              Voit tehdä muistiinpanoja tällä sivulla sekä kirjoittaa
               kommentteja omiin ja muiden tekemiin muistiinpanoihin.
             </div>
             <div className="my-2">
               Jos muistiinpanossa käsitellyt asiat ovat jo tehty / saatu
-              valmiiksi / sovittu, muistakaa poistaa vanhat muistiinpanot. Vai
-              onko tajunnassa
+              valmiiksi, muistakaa poistaa vanhat muistiinpanot.
             </div>
           </div>
 

@@ -1,0 +1,11 @@
+button.rdrDay.rdrDayDisabled  {
+     background-color: rgba(209, 22, 22, 0.621);
+    border-radius: 50%;
+    padding: 2px;
+    
+}
+  
+button.rdrDay.rdrDayDisabled span {
+    color: white;
+  }
+  

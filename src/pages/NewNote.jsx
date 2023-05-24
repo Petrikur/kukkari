@@ -3,8 +3,8 @@ import { AuthContext } from "../components/context/authContext";
 import LoadingSpinner from "../Ui/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+import { RiAddLine } from "react-icons/ri";
 
 const NewNote = ({ socket }) => {
   const auth = useContext(AuthContext);
@@ -60,22 +60,23 @@ const NewNote = ({ socket }) => {
     <React.Fragment>
       <div className="">
         <form
-          className=" max-w-lg mt-20 md:mt-36 flex flex-col px-6 mx-auto justify-center border border-white rounded-md p-10 py-20 bg-gray-900 "
+          className=" max-w-lg mt-20 md:mt-36 flex flex-col px-6 mx-auto justify-center border border-white rounded-md p-10 py-20 bg-gray-800 "
           onSubmit={noteSubmitHandler}
         >
-          <h1 className="text-center text-white text-2xl font-bold mb-6">
+          <h1 className="text-center text-white text-2xl  mb-6">
             Lisää uusi
           </h1>
           {isLoading && <LoadingSpinner asOverlay />}
           <div className="space-y-2 mb-6">
-            <label htmlFor="title" className="block text-white font-medium">
+            <label htmlFor="title" className="block text-white font-medium ">
               Otsikko
             </label>
             <input
               id="title"
               type="text"
-              className="border border-gray-400 rounded-md px-3 py-2 w-full"
+              className="border border-gray-700 bg-gray-700 rounded-md px-3 py-2 w-full text-white"
               onChange={inputHandler}
+              placeholder="Kirjoita otsikko"
             />
           </div>
           <div className="space-y-2">
@@ -91,7 +92,7 @@ const NewNote = ({ socket }) => {
               rows={10}
               cols={3}
               id="description"
-              className="border border-gray-400 rounded-md px-3 py-2 w-full"
+              className="border text-white bg-gray-700 border-gray-600  rounded-md px-3 py-2 w-full"
             />
           </div>
           <div className="text-right flex justify-between items-center mt-2">
@@ -104,21 +105,18 @@ const NewNote = ({ socket }) => {
             >
               Peruuta
             </button>
-            <button
+            <div className="flex items-center justify-between">
+           { !isLoading && <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md px-4 mt-4 py-2"
+              className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-medium rounded-md px-4 mt-4 py-2"
             >
+            <RiAddLine size={22}/>
               Lisää
-            </button>
+            </button>}
+            </div>
           </div>
         </form>
       </div>
-      <ToastContainer
-        position="bottom-center"
-        autoClose={2500}
-        rtl={false}
-        theme="dark"
-      />
     </React.Fragment>
   );
 };

@@ -1,10 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../components/context/authContext";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../Ui/LoadingSpinner";
 import backgroundImage from "../assets/bgg.jpg";
+import { toast } from "react-toastify";
 
 const Auth = () => {
   const auth = useContext(AuthContext);
@@ -13,7 +14,6 @@ const Auth = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
-
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -40,25 +40,22 @@ const Auth = () => {
         }
       );
       auth.login(responseData.data.userId, responseData.data.token);
-      setIsLoading(false);
+      toast.success("Kirjauduttu sisään");
       if (responseData.data.token) {
         navigate("/");
       }
+      setIsLoading(false);
     } catch (err) {
       setIsLoading(false);
       const error = err.response.data.message;
-     setError(error)
+      setError(error);
       console.log(err.response.data.message);
       console.log(err);
     }
   };
 
   if (isLoading) {
-    return (
-      <div className="">
-        <LoadingSpinner />
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   return (

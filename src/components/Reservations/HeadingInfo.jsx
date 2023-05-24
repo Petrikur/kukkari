@@ -5,8 +5,8 @@ const HeadingInfo = () => {
     <>
       <h1 className="text-4xl mb-5 ">Varaukset</h1>
       <div className="text-md">
-        Voit tehdä varauksia painamalla tee varaus täällä. Alla olevassa
-        kalenterissa näät jo varatut ajat. Jos perut varamaamasi ajan, muista
+        Voit tehdä varauksia tällä sivulla painamalla "tee varaus". Alla olevassa
+        kalenterissa näät varatut ajat. Jos perut varamaamasi ajan, muista
         poistaa varauksesi. Voit poistaa oman varauksesi klikkaamalla isosta
         kalenterista varausta ja poistaa sen.
       </div>

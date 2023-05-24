@@ -5,8 +5,9 @@ import Modal from "../../Ui/Modal";
 import axios from "axios";
 import LoadingSpinner from "../../Ui/LoadingSpinner";
 import { Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+
+
 
 export function MaterialSymbolsEditSharp(props) {
   return (
@@ -242,20 +243,20 @@ const NoteItem = (props) => {
         type={"comment"}
         modalType={"delete"}
       >
-        <p>Vahvista kommentin poisto.</p>
+        <p className="text-white">Vahvista kommentin poisto.</p>
       </Modal>
 
       <li
         ref={listItemRef}
-        className="border rounded-lg shadow-md md:w-1/4 w-full p-6 mb-4 bg-gray-700 border-white shadow-slate-700 break overflow-auto"
+        className="border rounded-lg shadow-md md:w-1/2 lg:w-1/2 xl:w-1/4 sm:w-2/3 w-full p-6 mb-4 bg-gray-700 border-white shadow-slate-700 "
       >
         <div className="mb-4 whitespace-normal max-w-xl">
-          <div className="flex flex-row items-center justify-between mb-10 ">
-            <h2 className="text-lg text-white font-bold mb-2 underline underline-offset-2 flex-wrap">
+          <div className="flex flex-row items-center justify-between mb-10">
+            <div className="text-lg text-white font-bold underline underline-offset-4 flex-wrap">
               {props.title}
-            </h2>
+            </div>
 
-            <div className=" text-sm text-white mt-3 justify-center flex items-center gap-3 ">
+            <div className="text-sm text-white flex items-center gap-3">
               <MaterialSymbolsAccountCircle className=" w-6 h-6" />
               {props.name}
               <div>
@@ -280,7 +281,7 @@ const NoteItem = (props) => {
         {/* Comments  */}
         <div
           key={props._id}
-          className="shadow-md p-6 mb-4 bg-gray-700 shadow-slate-700 break "
+          className="p-6 mb-4 bg-gray-700 rounded-md shadow-md"
         >
           {comments.map((comment, index) => {
             const formattedDate = new Date(comment.createdAt).toLocaleString(
@@ -293,33 +294,37 @@ const NoteItem = (props) => {
                 minute: "numeric",
               }
             );
+
             return (
               <div
                 key={`${comment._id}-${index}`}
-                className="mb-4 flex items-center justify-between"
+                className="mb-4 flex items-center"
               >
-                <div className="flex-grow max-w-full">
-                  <div className="text-white font-sm mb-1  text-md">
-                    {comment.authorName} --- {formattedDate}
-                  </div>
-
-                  <div className="mr-4 bg-gray-100 shadow-md p-4 rounded-lg max-w-xl">
-                    <p className="text-gray-600 text-sm whitespace-pre-line">
+                <div className="flex-grow">
+                  <div className="bg-gray-100 p-4 rounded-lg">
+                    <p className="text-gray-800 text-sm leading-snug whitespace-pre-line">
                       {comment.content}
                     </p>
+                    <div className="text-gray-500 text-xs text-right mt-2">
+                      <span className="text-sm">{comment.authorName}</span> -{" "}
+                      {formattedDate}
+                    </div>
                   </div>
                 </div>
 
-                {/* If person made the comment, add delete button */}
                 {comment.author === auth.userId && (
-                  <button
-                    onClick={() => {
-                      deleteCommentConfirm(comment);
-                    }}
-                    className="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-md"
-                  >
-                    <LucideTrash2 />
-                  </button>
+                  <div className="ml-4">
+                    <button
+                      onClick={() => {
+                        deleteCommentConfirm(comment);
+                      }}
+                      className={`flex items-center justify-center bg-red-500 hover:bg-red-600 text-white rounded-sm w-8 h-8
+               
+              `}
+                    >
+                      <LucideTrash2 />
+                    </button>
+                  </div>
                 )}
               </div>
             );
@@ -338,12 +343,14 @@ const NoteItem = (props) => {
               }}
             ></textarea>
             <div className="mt-2 flex justify-end gap-2">
-              <button
-                className="px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-md hover:bg-green-600 ml-2"
-                type="submit"
-              >
-                Lähetä
-              </button>
+              {!isLoading && (
+                <button
+                  className="px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-md hover:bg-green-600 ml-2"
+                  type="submit"
+                >
+                  Lähetä
+                </button>
+              )}
               <button
                 className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-600"
                 type="button"
@@ -354,7 +361,7 @@ const NoteItem = (props) => {
             </div>
           </form>
         ) : (
-          <div className="mt-5 flex flex-col items-center justify-between sm:flex-row gap-4 ">
+          <div className="mt-5 flex flex-col items-center justify-between md:flex-row gap-4 xl:flex-col 2xl:flex-row ">
             <button
               onClick={handleAddCommentClick}
               className="px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-md hover:bg-green-600 ml-2"
@@ -385,12 +392,6 @@ const NoteItem = (props) => {
           </div>
         )}
       </li>
-      <ToastContainer
-        position="bottom-center"
-        autoClose={2500}
-        rtl={false}
-        theme="dark"
-      />
     </React.Fragment>
   );
 };

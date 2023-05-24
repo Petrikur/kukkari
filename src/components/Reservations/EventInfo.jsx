@@ -22,14 +22,14 @@ const EventInfo = ({ selectedEvent }) => {
   return (
     <div className="flex flex-col">
       <div className="text-xl text-white ">Varaaja</div>
-      <div className="bg-white rounded p-4 flex items-center mt-2 mb-6">
-        <MdPerson size={24} color="black" className="mr-2" />
-        <div className="text-lg ">{selectedEvent.name}</div>
+      <div className="mt-4 p-4 bg-gray-800 rounded-lg  border-gray-600 items-center flex border-2 mb-2">
+        <MdPerson size={24} color="white" className="mr-2" />
+        <div className="text-lg text-gray-200">{selectedEvent.name}</div>
       </div>
-      <div className="text-xl text-white ">Lisätiedot</div>
-      <div className="mt-4 p-4 bg-white rounded-lg">
-        <div className="flex items-center mb-4">
-          <MdToday size={24} color="black" className="mr-2" />
+      <div className="text-xl text-white">Lisätiedot</div>
+      <div className="mt-4 p-4 bg-gray-800  rounded-lg border-2  border-gray-600">
+        <div className="flex items-center mb-4 text-gray-200">
+          <MdToday size={24} color="white" className="mr-2" />
           {isSingleDayEvent ? (
             formattedStartDate
           ) : (
@@ -38,9 +38,10 @@ const EventInfo = ({ selectedEvent }) => {
             </div>
           )}
         </div>
-        <div className="">{selectedEvent.description}</div>
+        <div className="text-gray-300">{selectedEvent.description}</div>
       </div>
     </div>
+   
   );
 };
 

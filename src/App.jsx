@@ -9,6 +9,9 @@ import NotFound from "./pages/notFound";
 import LoadingSpinner from "./Ui/LoadingSpinner";
 import io from "../node_modules/socket.io-client";
 // import io from "socket.io-client";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const NewNote = React.lazy(() => import("./pages/NewNote"));
 const UpdateNote = React.lazy(() => import("./pages/UpdateNote"));
@@ -20,7 +23,6 @@ const ForgotPasswordPage = React.lazy(() =>
 const ResetPassword = React.lazy(() => import("./pages/passwordResetPage"));
 const Auth = React.lazy(() => import("./pages/auth"));
 
-
 function App() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,12 +33,16 @@ function App() {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io(`${import.meta.env.VITE_SOCKETIO_URL}`, { transports: ['websocket'], forceNew: true, reconnectionAttempts: 3, timeout: 2000, })  
+    const newSocket = io(`${import.meta.env.VITE_SOCKETIO_URL}`, {
+      transports: ["websocket"],
+      forceNew: true,
+      reconnectionAttempts: 3,
+      timeout: 2000,
+    });
     // const newSocket = io("http://localhost:5000");
     setSocket(newSocket);
     return () => newSocket.close();
   }, []);
-
 
   const toggle = () => {
     setIsOpen(!isOpen);
@@ -73,7 +79,6 @@ function App() {
       console.log(err);
     }
   }, []);
-
 
   const logout = useCallback(() => {
     setToken(null);
@@ -118,12 +123,24 @@ function App() {
           element={<ResetPassword />}
         ></Route>
         <Route path="/" element={<LandingPage />}></Route>
-        <Route path="/maintenance" element={<NotesPage socket={socket} />}></Route>
-        <Route path="/maintenance/:noteId" element={<UpdateNote  socket={socket} />}></Route>
-        <Route path="/maintenance/newnote" element={<NewNote  socket={socket} />}></Route>
-        <Route path="/reservations" element={<Reservations  socket={socket} />}></Route>
+        <Route
+          path="/maintenance"
+          element={<NotesPage socket={socket} />}
+        ></Route>
+        <Route
+          path="/maintenance/:noteId"
+          element={<UpdateNote socket={socket} />}
+        ></Route>
+        <Route
+          path="/maintenance/newnote"
+          element={<NewNote socket={socket} />}
+        ></Route>
+        <Route
+          path="/reservations"
+          element={<Reservations socket={socket} />}
+        ></Route>
         <Route path="/forgotpassword" element={<ForgotPasswordPage />}></Route>
-        <Route path="*" element={<NotFound/>} />
+        <Route path="*" element={<NotFound />} />
       </React.Fragment>
     );
   } else {
@@ -157,17 +174,16 @@ function App() {
         <Router>
           <Mobilemenu toggle={toggle} isOpen={isOpen} />
           <Navbar toggle={toggle} />
-            <Suspense
-              fallback={
-                <div className="center">
-                  <LoadingSpinner />
-                </div>
-              }
-            >
-          <Routes>
-              {routes}
-          </Routes>
-            </Suspense>
+          <Suspense
+            fallback={
+              <div className="center">
+                <LoadingSpinner />
+              </div>
+            }
+          >
+            <Routes>{routes}</Routes>
+          </Suspense>
+          <ToastContainer autoClose={1500} rtl={false} theme="dark" />
         </Router>
       </div>
     </AuthContext.Provider>

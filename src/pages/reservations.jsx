@@ -3,8 +3,7 @@ import { useState, useEffect, useContext, useCallback } from "react";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../Ui/LoadingSpinner";
 import { AuthContext } from "../components/context/authContext";
@@ -294,6 +293,7 @@ const Reservations = ({ socket }) => {
   return (
     <>
       <div className="flex items-center justify-center pt-28 flex-col py-2 px-4 ">
+        {isLoading && <LoadingSpinner asOverlay /> }
         {/* delete confimation modal */}
         <Modal
           modalType={"delete"}
@@ -324,7 +324,6 @@ const Reservations = ({ socket }) => {
         >
           {selectedEvent && <EventInfo selectedEvent={selectedEvent} />}
         </Modal>
-        {isLoading && <LoadingSpinner asOverlay />}
         <div className="text-white mb-20 lg:px-52 lg:ml-20">
           <HeadingInfo />
         </div>
@@ -346,10 +345,11 @@ const Reservations = ({ socket }) => {
             description={description}
             setDescription={setDescription}
             disabledDates={disabledDates}
+            isLoading={isLoading}
           />
         )}
         {/* Big calendar  */}
-        <div className=" calendar mx-auto w-full lg:w-3/4 xl:w-2/4 mb-20">
+        <div className=" calendar mx-auto w-full lg:w-2/4 mb-12">
           <Calendar
             events={events}
             localizer={localizer}
@@ -371,7 +371,7 @@ const Reservations = ({ socket }) => {
             setShowConfirmModal={setShowConfirmModal}
           />
         </div>
-        <ToastContainer />
+ 
       </div>
     </>
   );

@@ -106,7 +106,7 @@ const AllReservationsList = ({ events, handleDeleteEvent }) => {
   };
 
   return (
-    <div className="flex flex-col h-screen mb-20 border-r">
+    <div className="flex flex-col h-screen mb-20 lg:border-r">
       <div className="flex-none p-4">
         <h2 className="text-white font-bold text-xl mb-4">Kaikki varaukset</h2>
 

@@ -9,7 +9,8 @@ const ModalOverlay = (props) => {
   const isInfoModal = props.modalType === "info";
   const auth = useContext(AuthContext);
   const [showDeleteButton, setShowDeleteButton] = useState(false);
-
+  const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     if (
       props.selectedEvent?.creator ||
@@ -18,20 +19,39 @@ const ModalOverlay = (props) => {
     ) {
       if (props.type === "reservation" && props.selectedEvent) {
         setShowDeleteButton(auth.userId === props.selectedEvent.creator);
+        setIsDeleteButtonDisabled(false);
       } else if (props.type === "note" && props.noteCreator) {
         setShowDeleteButton(auth.userId === props.noteCreator);
+        setIsDeleteButtonDisabled(false);
       } else if (props.type === "comment") {
         setShowDeleteButton(true);
+        setIsDeleteButtonDisabled(false);
       }
     }
-  }, [props]);
+  }, [props.selectedEvent, props.noteCreator, props.type]);
+
+  // Disable button after submission
+  const handleDelete = async () => {
+    setIsDeleteButtonDisabled(true);
+    setIsLoading(true);
+    try {
+      await props.onDelete();
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoading(false);
+  };
 
   const content = (
     <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 w-[95%] -translate-y-1/2 z-50 sm:w-96 md:w-120 ">
-      <div className="relative bg-gray-900 border-gray-200 border-2 rounded-lg  p-5 ">
-        <header className="p-6 border-b flex justify-between items-center text-white">
+      <div className="relative bg-gray-700  border-2 rounded-lg  p-5  ">
+        <header className="p-6  flex justify-between items-center text-white">
           <div className="text-center">
-            {!isInfoModal ? <MdWarning color={"red"} size={36} /> : <MdInfo  color={"yellow"} size={36}/>  }
+            {!isInfoModal ? (
+              <MdWarning color={"red"} size={36} />
+            ) : (
+              <MdInfo color={"yellow"} size={36} />
+            )}
           </div>
           <h1 className="text-lg font-semibold">{props.header}</h1>
           <button id="modalCloseButton" onClick={props.onCancel}>
@@ -56,7 +76,8 @@ const ModalOverlay = (props) => {
               <button
                 className="text-red-500 font-semibold flex items-center"
                 id="modalDeleteButton"
-                onClick={props.onDelete}
+                onClick={handleDelete}
+                disabled={isDeleteButtonDisabled || isLoading}
               >
                 <MdDelete size={20} className="mr-1" />
                 Poista
