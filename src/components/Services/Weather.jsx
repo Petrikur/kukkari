@@ -3,23 +3,23 @@ import axios from "axios";
 import { TiThermometer } from "react-icons/ti";
 import { BiWind, BiCloudRain } from "react-icons/bi";
 
-const Weather = () => {
-  const [weatherData, setWeatherData] = useState(null);
+const Weather = ({weatherData}) => {
+  // const [weatherData, setWeatherData] = useState(null);
 
-  useEffect(() => {
-    const fetchWeatherData = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}/weather`
-        );
-        setWeatherData(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchWeatherData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${import.meta.env.VITE_SERVER_URL}/weather`
+  //       );
+  //       setWeatherData(response.data);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
-    fetchWeatherData();
-  }, []);
+  //   fetchWeatherData();
+  // }, []);
 
   const getTemperatureColorClass = (temperature) => {
     if (temperature > 22) {
