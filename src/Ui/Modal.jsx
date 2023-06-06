@@ -11,11 +11,12 @@ const ModalOverlay = (props) => {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
   const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     if (
       props.selectedEvent?.creator ||
       props.noteCreator ||
-      props.type === "comment"
+      props.type === "comment" || props.type === "image"
     ) {
       if (props.type === "reservation" && props.selectedEvent) {
         setShowDeleteButton(auth.userId === props.selectedEvent.creator);
@@ -25,6 +26,9 @@ const ModalOverlay = (props) => {
         setIsDeleteButtonDisabled(false);
       } else if (props.type === "comment") {
         setShowDeleteButton(true);
+        setIsDeleteButtonDisabled(false);
+      }else if(props.type === "image" && props.creator === auth.userId){
+        setShowDeleteButton(true)
         setIsDeleteButtonDisabled(false);
       }
     }
@@ -45,7 +49,7 @@ const ModalOverlay = (props) => {
   const content = (
     <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 w-[95%] -translate-y-1/2 z-50 sm:w-96 md:w-120 ">
       <div className="relative bg-gray-700  border-2 rounded-lg  p-5  ">
-        <header className="p-6  flex justify-between items-center text-white">
+        <header className="p-6 flex justify-between items-center text-white">
           <div className="text-center">
             {!isInfoModal ? (
               <MdWarning color={"red"} size={36} />

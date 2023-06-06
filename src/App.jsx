@@ -11,8 +11,9 @@ import io from "../node_modules/socket.io-client";
 // import io from "socket.io-client";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+// import Gallery from "./pages/gallery";
 
-
+const Gallery = React.lazy(() => import("./pages/gallery"));
 const NewNote = React.lazy(() => import("./pages/NewNote"));
 const UpdateNote = React.lazy(() => import("./pages/UpdateNote"));
 const NotesPage = React.lazy(() => import("./pages/NotesPage"));
@@ -127,6 +128,7 @@ function App() {
           path="/maintenance"
           element={<NotesPage socket={socket} />}
         ></Route>
+           <Route path="/gallery" element={<Gallery  />}></Route>
         <Route
           path="/maintenance/:noteId"
           element={<UpdateNote socket={socket} />}
