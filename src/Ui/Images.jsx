@@ -97,20 +97,15 @@ const Images = ({ images, getImages, isLoading, setIsLoading }) => {
             >
               <FaArrowLeft size={40} color="white" />
             </button>
-            <TransformWrapper>
-              <TransformComponent>
-                <div className="flex flex-col items-center justify-center">
-                  <div className="text-white text-center mb-2">
-                    {selectedImage.key.split("_")[2]}
-                  </div>
-                  <img
-                    src={selectedImage.url}
-                    alt="test"
-                    className="large-image"
-                  />
-                </div>
-              </TransformComponent>
-            </TransformWrapper>
+
+            <div className="flex flex-col items-center justify-center">
+              <div className="text-white text-center mb-2">
+                {selectedImage.key.split("_")[2]}
+              </div>
+
+              <img src={selectedImage.url} alt="test" className="large-image" />
+            </div>
+
             <button
               onClick={handleNextImage}
               className="arrow-button right-arrow"
