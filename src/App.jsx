@@ -18,6 +18,7 @@ const NewNote = React.lazy(() => import("./pages/NewNote"));
 const UpdateNote = React.lazy(() => import("./pages/UpdateNote"));
 const NotesPage = React.lazy(() => import("./pages/NotesPage"));
 const Reservations = React.lazy(() => import("./pages/reservations"));
+const AccountPage = React.lazy(() => import("./pages/AccountPage"));
 const ForgotPasswordPage = React.lazy(() =>
   import("./pages/forgotPasswordPage")
 );
@@ -128,11 +129,14 @@ function App() {
           path="/maintenance"
           element={<NotesPage socket={socket} />}
         ></Route>
-           <Route path="/gallery" element={<Gallery  />}></Route>
+        <Route path="/gallery" element={<Gallery />}></Route>
         <Route
           path="/maintenance/:noteId"
           element={<UpdateNote socket={socket} />}
         ></Route>
+
+        <Route path="/ownaccount" element={<AccountPage />}></Route>
+
         <Route
           path="/maintenance/newnote"
           element={<NewNote socket={socket} />}

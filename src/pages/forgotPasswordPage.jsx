@@ -47,7 +47,7 @@ const ForgotPasswordPage = () => {
           className="w-full max-w-md border  border-white p-8 rounded-lg shadow-md"
           onSubmit={handleSubmit}
         >
-          <h2 className="text-2xl font-medium mb-16">Salasanan palautus</h2>
+          <h2 className="text-2xl font-medium mb-16">Salasanan Vaihto</h2>
           <label className="text-xl  " htmlFor="email">
             Syötä sähköposti
           </label>

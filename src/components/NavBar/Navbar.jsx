@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
-
+import { FaCog } from "react-icons/fa";
 export function HumbleiconsBars(props) {
   return (
     <svg
@@ -75,8 +75,16 @@ const Navbar = ({ toggle }) => {
               Unohdin salasanan
             </Link>
           ) : (
-            <div className="inline-block  bg-gray-200 text-gray-800 font-bold py-2 px-4 ">
-              Kirjautuneena:  {auth.name}
+            <div className="flex flex-row justify-between items-center">
+              <Link
+                to="/ownaccount"
+                className=" bg-gray-200 text-gray-800 font-bold py-2 px-4 flex items-center"
+              >
+                <div className="mr-2">
+                  <FaCog />
+                </div>
+                Oma tili - {auth.name}
+              </Link>
             </div>
           )}
           {!auth.isLoggedIn && (
