@@ -1,7 +1,7 @@
 # Kukkari
 Welcome to the Kukkari Website project! This is a React application built using Vite as a build tool, aimed at providing an online platform for my family members to reserve the cabin, write and view notes about cabin stuff and comment on them, view a gallery of photos, and more.
 
-Project is currently in development and link to live project will come later.
+Project is currently in development and link to live project will come later. All text in app is in finnish because our family is from finland.
 
 ## Features
 Here are some of the features available in this application:
@@ -10,9 +10,9 @@ Reserve Cabin: Users can easily view the calendar and make reservation or cancel
 
 Notes: Users can create and view notes about anything related to the cabin. Additionally, they can also comment on notes to engage in discussions with other users.
 
-Gallery: Users can view a gallery of photos of the cabin, including both interior and exterior shots.
+Gallery: Users can view a gallery of photos of the cabin, including both interior and exterior shots and also upload new images which are stored in AWS S3.
 
-More coming...
+Own account page: Users can change password, see their reservations etc. And opt in for notifications if someone creates new reservation etc.
 
 ## Getting Started
 To get started with this project, follow these steps:

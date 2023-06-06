@@ -17,9 +17,9 @@ const Mobilemenu = ({ isOpen, toggle }) => {
     mobilemenuLinks = [
       { to: "/", label: "Etusivu" },
       { to: "gallery", label: "Galleria" },
-      { to: "buildings", label: "Rakennukset" },
       { to: "reservations", label: "Varausvuorot" },
       { to: "maintenance", label: "Ylläpito" },
+      { to: "ownaccount", label: "Minun tili" },
     ];
   } else {
     mobilemenuLinks = [
@@ -38,8 +38,9 @@ const Mobilemenu = ({ isOpen, toggle }) => {
         {isOpen && (
           <div className="p-4 w-full my-20 items-center justify-center ">
             <ul className="space-y-2 flex flex-col items-center ">
-              {mobilemenuLinks.map((link) => (
+              {mobilemenuLinks.map((link,index) => (
                 <Link
+                key={index}
                   to={link.to}
                   className="block  px-4 py-2 text-white rounded-md hover:bg-gray-700"
                   onClick={toggle}

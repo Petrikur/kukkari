@@ -54,9 +54,6 @@ const Navbar = ({ toggle }) => {
                   <Link to="/gallery">Galleria</Link>
                 </li>
                 <li>
-                  <Link to="/buildings">Rakennukset</Link>
-                </li>
-                <li>
                   <Link to="/reservations">Varausvuorot</Link>
                 </li>
                 <li>
