@@ -293,7 +293,7 @@ const Reservations = ({ socket }) => {
   return (
     <>
       <div className="flex items-center justify-center pt-28 flex-col py-2 px-4 ">
-        {isLoading && <LoadingSpinner asOverlay /> }
+        {isLoading && <LoadingSpinner color={"black"} asOverlay /> }
         {/* delete confimation modal */}
         <Modal
           modalType={"delete"}

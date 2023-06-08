@@ -84,7 +84,7 @@ const NewNote = ({ socket }) => {
               htmlFor="description"
               className="block text-white font-medium"
             >
-              Kuvaus <span className="">(Vähintään 8 merkkiä)</span>
+              Kuvaus <span className="">(Vähintään 5 merkkiä)</span>
             </label>
             <textarea
               placeholder="Kirjoita kuvaus"
