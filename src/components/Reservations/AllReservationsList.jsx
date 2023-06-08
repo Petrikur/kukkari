@@ -136,10 +136,9 @@ const AllReservationsList = ({ events, handleDeleteEvent }) => {
           onCancel={() => {
             setShowInfoModal(false);
           }}
-          type={"reservation"}
-          selectedEvent={selectedEvent}
+          creator={selectedEvent?.creator}
           onDelete={deleteResevation}
-          modalType={"info"}
+          modalType="info"
         >
           <EventInfo selectedEvent={selectedEvent} />
         </Modal>
@@ -152,9 +151,8 @@ const AllReservationsList = ({ events, handleDeleteEvent }) => {
           onCancel={() => {
             setShowConfirmModal(false);
           }}
-          selectedEvent={selectedEvent}
+          creator={selectedEvent?.creator}
           onDelete={confirmDelete}
-          type="reservation"
           modalType={"delete"}
         >
           <p className="text-white">

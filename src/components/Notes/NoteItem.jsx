@@ -223,8 +223,8 @@ const NoteItem = (props) => {
         onCancel={cancelDeleteHandler}
         onDelete={confirmDeleteHandler}
         type="note"
-        noteCreator={props.creator}
-        modalType={"delete"}
+        creator={props.creator}
+         modalType={"delete"}
       >
         <p className="text-white">
           Oletko varma että haluat poistaa muistiinpanon?
@@ -240,8 +240,9 @@ const NoteItem = (props) => {
         onDelete={() => {
           handleCommentDelete(comment);
         }}
+        creator={props.creator}
         type={"comment"}
-        modalType={"delete"}
+           modalType={"delete"}
       >
         <p className="text-white">Vahvista kommentin poisto.</p>
       </Modal>

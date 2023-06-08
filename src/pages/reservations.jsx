@@ -303,9 +303,8 @@ const Reservations = ({ socket }) => {
           onCancel={() => {
             cancelDeleteHandler(false);
           }}
-          selectedEvent={selectedEvent}
+          creator={selectedEvent?.creator}
           onDelete={() => handleDeleteEvent(selectedEvent._id)}
-          type="reservation"
         >
           <p className="text-white">
             Oletko varma että haluat poistaa varauksen?
@@ -319,8 +318,7 @@ const Reservations = ({ socket }) => {
           header="Varauksen tiedot"
           onDelete={confirmDelete}
           onCancel={handleCancelInfo}
-          selectedEvent={selectedEvent}
-          type={"reservation"}
+          creator={selectedEvent?.creator}
         >
           {selectedEvent && <EventInfo selectedEvent={selectedEvent} />}
         </Modal>

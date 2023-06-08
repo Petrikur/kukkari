@@ -79,9 +79,8 @@ const Images = ({ images, getImages, isLoading, setIsLoading }) => {
         header={modalType === "confirm" ? "Oletko varma?" : "Poista kuva?"}
         onCancel={closeImageModal}
         onDelete={() => handleImageDelete(selectedImage.key)}
-        type="image"
         modalType={modalType}
-        creator={selectedImage.key.split("_")[0]}
+        creator={selectedImage?.key.split("_")[0]}
       >
         <p className="text-white">Vahvista kuvan poisto.</p>
       </Modal>
@@ -115,7 +114,7 @@ const Images = ({ images, getImages, isLoading, setIsLoading }) => {
           </div>
         )}
       </div>
-      {auth.userId === selectedImage.key.split("_")[0] && (
+      {auth.userId === selectedImage?.key.split("_")[0] && (
         <button
           onClick={openImageModal}
           className="rounded bg-red-500 px-3 py-2 text-white  font-medium mb-4"

@@ -13,26 +13,12 @@ const ModalOverlay = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (
-      props.selectedEvent?.creator ||
-      props.noteCreator ||
-      props.type === "comment" || props.type === "image"
-    ) {
-      if (props.type === "reservation" && props.selectedEvent) {
-        setShowDeleteButton(auth.userId === props.selectedEvent.creator);
-        setIsDeleteButtonDisabled(false);
-      } else if (props.type === "note" && props.noteCreator) {
-        setShowDeleteButton(auth.userId === props.noteCreator);
-        setIsDeleteButtonDisabled(false);
-      } else if (props.type === "comment") {
-        setShowDeleteButton(true);
-        setIsDeleteButtonDisabled(false);
-      }else if(props.type === "image" && props.creator === auth.userId){
-        setShowDeleteButton(true)
-        setIsDeleteButtonDisabled(false);
-      }
-    }
-  }, [props.selectedEvent, props.noteCreator, props.type]);
+    if(props.creator === auth.userId || props.type === "comment"){
+      setShowDeleteButton(true)
+      setIsDeleteButtonDisabled(false);
+  
+    } 
+  }, [props.creator]);
 
   // Disable button after submission
   const handleDelete = async () => {
