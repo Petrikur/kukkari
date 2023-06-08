@@ -8,12 +8,15 @@ import { FaCalendarAlt, FaCog } from "react-icons/fa";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { FaBell } from "react-icons/fa";
 import { toast } from "react-toastify";
+import CheckButton from "../Ui/CheckButton";
 
 const AccountPage = () => {
   const [reservations, setReservations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const auth = useContext(AuthContext);
-  const [emailNotifications, setEmailNotifications] = useState(false);
+  const [noteEmailNotifications, setNoteEmailNotifications] = useState(false);
+  const [reservationEmailNotifications, setReservationEmailNotifications] =
+    useState(false);
   const [toggleButtonDisabled, setToggleButtonDisabled] = useState(false);
 
   const fetchReservations = async () => {
@@ -52,8 +55,10 @@ const AccountPage = () => {
         }
       );
 
-      const { emailNotifications } = response.data;
-      setEmailNotifications(emailNotifications);
+      const { noteEmailNotifications, reservationEmailNotifications } =
+        response.data;
+      setNoteEmailNotifications(noteEmailNotifications);
+      setReservationEmailNotifications(reservationEmailNotifications);
     } catch (error) {
       console.error("Failed to fetch email notifications:", error);
     } finally {
@@ -80,24 +85,42 @@ const AccountPage = () => {
     }
   };
 
-  const updateEmailNotifications = async (value) => {
+  const updateEmailNotifications = async (
+    noteNotifications,
+    reservationNotifications,
+    type
+  ) => {
     setToggleButtonDisabled(true);
     setIsLoading(true);
     try {
-      await axios.patch(
-        `${import.meta.env.VITE_SERVER_URL}` +
-          `/users/${auth.userId}/email-notifications`,
-        { emailNotifications: value },
+      const res = await axios.patch(
+        `${import.meta.env.VITE_SERVER_URL}/users/${
+          auth.userId
+        }/email-notifications`,
+        {
+          noteEmailNotifications: noteNotifications,
+          reservationEmailNotifications: reservationNotifications,
+        },
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,
           },
         }
       );
-      const message =
-        value === false
-          ? "Ilmoitukset poistettu käytöstä"
-          : "Ilmoitukset tilattu";
+   
+      let message;
+      if (type === "reservation") {
+        message =
+        reservationNotifications === true
+            ? "Ilmoitukset varauksista otettu käyttöön."
+            : "Ilmoitukset varauksista poistettu käytöstä.";
+      } else if (type === "note") {
+        message =
+          noteNotifications === true
+            ? "Ilmoitukset muistiinpanoista otettu käyttöön."
+            : "Ilmoitukset muistiinpanoista poistettu käytöstä.";
+      }
+
       toast.success(message);
       setIsLoading(false);
 
@@ -110,9 +133,18 @@ const AccountPage = () => {
     }
   };
 
-  const handleToggleNotifications = () => {
-    setEmailNotifications(!emailNotifications);
-    updateEmailNotifications(!emailNotifications);
+  const handleToggleReservationNotifications = () => {
+    const type = "reservation";
+    const newVal = !reservationEmailNotifications;
+    setReservationEmailNotifications(newVal);
+    updateEmailNotifications(noteEmailNotifications, newVal, type);
+  };
+
+  const handleToggleNoteNotifications = () => {
+    const type = "note";
+    const newVal = !noteEmailNotifications;
+    setNoteEmailNotifications(newVal);
+    updateEmailNotifications(newVal, reservationEmailNotifications, type);
   };
 
   return (
@@ -130,7 +162,7 @@ const AccountPage = () => {
           Asetukset
         </h3>
         <Link to="/forgotpassword">
-          <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+          <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 ml-0 lg:ml-3">
             Vaihda salasana
           </button>
         </Link>
@@ -144,7 +176,7 @@ const AccountPage = () => {
         {reservations.length === 0 ? (
           <p>Ei varauksia.</p>
         ) : (
-          <ul className="pl-6 list-none">
+          <ul className="pl-6 list-none  ml-0 lg:ml-1">
             {reservations.map((reservation) => (
               <li
                 key={reservation.id}
@@ -154,7 +186,7 @@ const AccountPage = () => {
                   <div className="w-[20px]">
                     <FaCalendarAlt className="h-full" />
                   </div>
-                  <div className="font-bold ml-2 max-w-md">
+                  <div className="font-bold ml-0 lg:ml-2 max-w-md">
                     {reservation.description}
                   </div>
                 </div>
@@ -169,30 +201,34 @@ const AccountPage = () => {
         {/* Notification settings */}
         <div className="flex items-center flex-row gap-3 mt-8">
           <FaBell />
-          <label className="text-xl font-bold mb-2">
-            Ilmoitusasetukset:
-          </label>
+          <div className="text-xl font-bold mb-2">Ilmoitusasetukset:</div>
         </div>
-        <div className="flex items-center flex-col lg:flex-row gap-6 mb-20">
-          <label className="text-md text-white ml-6">
-            Tilaa ilmoitukset uusista varauksista yms. sähköpostiin.
-          </label>
-          <div className="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-            <input
-              type="checkbox"
-              name="toggle"
-              id="toggle"
-              onChange={handleToggleNotifications}
-              checked={emailNotifications}
-              disabled={toggleButtonDisabled}
-              className="toggle-checkbox absolute  block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
-            />
-            <label
-              htmlFor="toggle"
-              className={`toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer ${
-                toggleButtonDisabled ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-            ></label>
+        <div className="text-md text-white ml-7 mb-4">
+          Tilaa ilmoitukset uusista varauksista ja muistiinpanoista
+          sähköpostiin.
+        </div>
+        <div className="flex flex-col ml-7 space-y-4">
+          <div className="flex flex-row items-center">
+            <div className="flex items-center gap-2">
+              {/* for reservation setting  */}
+              <CheckButton
+                onChange={handleToggleReservationNotifications}
+                checked={reservationEmailNotifications}
+                toggleButtonDisabled={toggleButtonDisabled}
+              />
+              <div>Varaukset</div>
+            </div>
+          </div>
+          <div className="flex flex-row items-center">
+            <div className="flex items-center gap-2">
+              {/* for note setting  */}
+              <CheckButton
+                onChange={handleToggleNoteNotifications}
+                checked={noteEmailNotifications}
+                toggleButtonDisabled={toggleButtonDisabled}
+              />
+              <div>Muistiinpanot</div>
+            </div>
           </div>
         </div>
       </div>

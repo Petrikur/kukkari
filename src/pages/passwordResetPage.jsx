@@ -20,6 +20,7 @@ const ResetPassword = () => {
       return;
     }
     try {
+      setIsLoading(true)
       
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}` + `/users/${id}/${token}`,
@@ -42,7 +43,7 @@ const ResetPassword = () => {
 
   return (
     <div className="flex justify-center items-center h-screen text-white">
-    {isLoading && <LoadingSpinner/>}
+    {isLoading && <LoadingSpinner color={"black"}/>}
       {requestSend && passwordChanged  ? (
         <div className="text-3xl p-5 border border-white rounded text-white">
           Salasana vaihdettu, voit nyt kirjautua sisään.
