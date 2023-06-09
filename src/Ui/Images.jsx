@@ -12,13 +12,11 @@ const Images = ({ images, getImages, isLoading, setIsLoading }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showImageModal, setShowImageModal] = useState(false);
   const [modalType, setModalType] = useState("");
-
   const handlePrevImage = () => {
     setSelectedImageIndex((prevIndex) =>
       prevIndex === 0 ? images.length - 1 : prevIndex - 1
     );
   };
-
   const handleNextImage = () => {
     setSelectedImageIndex((prevIndex) =>
       prevIndex === images.length - 1 ? 0 : prevIndex + 1
@@ -99,7 +97,16 @@ const Images = ({ images, getImages, isLoading, setIsLoading }) => {
 
             <div className="flex flex-col items-center justify-center">
               <div className="text-white text-center mb-2">
-                {selectedImage.key.split("_")[2]}
+                {/* image info */}
+                <p className="text-lg">
+                  {decodeURIComponent(selectedImage?.imagename)}
+                </p>
+                <p className="text-gray-500">- {selectedImage.username}</p>
+                <p className="text-gray-500">
+                  {new Date(selectedImage.uploadedAt).toLocaleDateString(
+                    "fi-FI"
+                  )}
+                </p>
               </div>
 
               <img src={selectedImage.url} alt="test" className="large-image" />

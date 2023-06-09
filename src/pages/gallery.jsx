@@ -4,6 +4,7 @@ import { AuthContext } from "../components/context/authContext";
 import Images from "../Ui/Images";
 import LoadingSpinner from "../Ui/LoadingSpinner";
 import { toast } from "react-toastify";
+import { useCallback } from "react";
 
 const Gallery = () => {
   const auth = useContext(AuthContext);
@@ -49,6 +50,7 @@ const Gallery = () => {
     formData.append("image", selectedImage);
     formData.append("name", imageName);
     formData.append("userId",auth.userId)
+    formData.append("username",auth.name)
 
     try {
       const response = await axios.post(
@@ -72,10 +74,10 @@ const Gallery = () => {
     }
   };
 
-  const handleFileSelect = (event) => {
+  const handleFileSelect = useCallback((event) => {
     const file = event.target.files[0];
     setSelectedImage(file);
-  };
+  }, []);
 
   const resetForm = () => {
     setShowForm(false);
@@ -132,7 +134,8 @@ const Gallery = () => {
                   id="imageFile"
                   ref={fileInputRef}
                   className="hidden"
-                  onChange={handleFileSelect}
+               
+                  onInput={handleFileSelect}
                   accept="image/*"
                   name="image"
                 />
