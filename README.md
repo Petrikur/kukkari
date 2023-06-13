@@ -7,16 +7,24 @@ Project is currently in development. All text in app is in finnish because our f
 Demo of current version is hosted [here](https://kukkari.vercel.app/#/)
 You must be signed in to see most of the content so feel free to create account.
 
+I have separate web app for actual family members so feel free to test this out.
+
 ## Features
 Here are some of the features available in this application:
 
-Reserve Cabin: Users can easily view the calendar and make reservation or cancel reservation on the cabin for a specific date range.
+#### Reserve Cabin: 
+Users can easily view the calendar and make reservation or cancel reservation on the cabin for a specific date range.
 
-Notes: Users can create and view notes about anything related to the cabin. Additionally, they can also comment on notes to engage in discussions with other users. 
+#### Notes: 
+Users can create and view notes about anything related to the cabin. Additionally, they can also comment on notes to engage in discussions with other users. 
 
-Gallery: Users can view a gallery of photos of the cabin, including both interior and exterior shots and also upload new images which are stored in AWS S3.
+#### Gallery: 
+Users can view a gallery of photos of the cabin, including both interior and exterior shots and also upload new images which are stored in AWS S3.
 
-Own account page: Users can change password, see their reservations etc. And opt in for notifications if someone creates new reservation etc.
+#### Own account page:
+ Users can change password, see their reservations etc. And opt in for notifications if someone creates new reservation etc.
+
+-------
 
 Notes, Reservations and comments are updated with socket.io for real time updates.
 
