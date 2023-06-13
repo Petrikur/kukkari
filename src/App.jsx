@@ -24,6 +24,7 @@ const ForgotPasswordPage = React.lazy(() =>
 );
 const ResetPassword = React.lazy(() => import("./pages/passwordResetPage"));
 const Auth = React.lazy(() => import("./pages/auth"));
+const SignUp = React.lazy(() => import("./pages/SignUp"));
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -159,6 +160,7 @@ function App() {
         ></Route>
         <Route path="/forgotpassword" element={<ForgotPasswordPage />}></Route>
         <Route path="/" element={<LandingPage />}></Route>
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/auth" element={<Auth />}></Route>
         <Route path="*" element={<Auth />} />
       </React.Fragment>

@@ -92,6 +92,14 @@ const Navbar = ({ toggle }) => {
               Kirjaudu
             </Link>
           )}
+          {!auth.isLoggedIn && (
+            <Link
+              to="/signup"
+              className="inline-block  text-white py-2 px-4 rounded-md transition-colors duration-300 hover:bg-gray-900"
+            >
+              Rekisteröidy
+            </Link>
+          )}
           {auth.isLoggedIn && (
             <button
               type="button"

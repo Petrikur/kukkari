@@ -26,6 +26,7 @@ const Mobilemenu = ({ isOpen, toggle }) => {
       { to: "/", label: "Etusivu" },
       { to: "/auth", label: "Kirjaudu" },
       { to: "/forgotpassword", label: "Unohdin salasanan" },
+      { to: "/signup", label: "Rekisteröidy" },
     ];
   }
   return (
