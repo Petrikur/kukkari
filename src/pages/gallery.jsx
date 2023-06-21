@@ -87,7 +87,7 @@ const Gallery = () => {
       fileInputRef.current.value = null;
     }
   };
-
+  const formBorderStyle = showForm ? "border" : "";
   return (
     <div className="flex items-center justify-center flex-col mt-28  lg:mt-28">
       {isLoading && <LoadingSpinner />}
@@ -110,7 +110,7 @@ const Gallery = () => {
           </button>
         </div>
       )}
-      <div className="shadow-lg bg-gray-900 broder-white border rounded-2xl ">
+      <div className={`shadow-lg bg-gray-900 ${formBorderStyle}  rounded-2xl`}>
         {showForm && (
           <div className="flex flex-col items-center p-8 gap-4">
             <h1 className=" text-white text-xl mb-14">Lisää kuva</h1>
