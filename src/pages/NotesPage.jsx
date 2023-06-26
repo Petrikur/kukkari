@@ -10,6 +10,8 @@ const NotesPage = ({ socket }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadedNotes, setLoadedNotes] = useState();
   const [searchQuery, setSearchQuery] = useState("");
+  const [users, setUsers] = useState([]);
+
   const getNotes = async () => {
     setIsLoading(true);
     try {
@@ -29,8 +31,25 @@ const NotesPage = ({ socket }) => {
     }
   };
 
+  const getUsers = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/users`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      setUsers(response.data.users);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     getNotes();
+    getUsers();
   }, []);
 
   const handleNewNote = ({ note }) => {
@@ -100,6 +119,9 @@ const NotesPage = ({ socket }) => {
             <LoadingSpinner />
           </div>
         )}
+
+       <div className="flex flex-col ">
+
         <div className="flex items-center justify-center pt-28 flex-col py-2 px-4 ">
           <div className="text-white mb-20 ">
             <h1 className="text-4xl mb-5 ">Muistiinpanot</h1>
@@ -139,6 +161,20 @@ const NotesPage = ({ socket }) => {
             />
           </div>
         )}
+
+        <div className="lg:fixed bottom-0 left-0 lg:w-1/5 top-20 lg:h-screen lg:p-4 ml-4 lg:ml-0">
+        <h3 className="text-2xl mb-2 text-white">Käyttäjät</h3>
+        <ul className="space-y-2">
+          {users.map((user,index) => (
+            <li className="text-white text-xl ml-4  p-2" key={user._id }>
+              {user.name}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+
+    </div>
       </React.Fragment>
     </>
   );
