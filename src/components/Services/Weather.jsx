@@ -34,7 +34,7 @@ const Weather = ({weatherData}) => {
   return (
     <div className="container mx-auto text-white bg-gradient-to-b mb-24">
       <h1 className="flex items-center justify-center pb-2 text-3xl text-white text-center">
-        Vehmersalmi ennuste
+        Sääennuste
       </h1>
       {weatherData && (
         <div className="flex flex-wrap justify-center gap-4 mt-8">
