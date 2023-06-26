@@ -12,40 +12,40 @@ I have separate web app for actual family members so feel free to test this out.
 
 <h3>Home</h3>
 <div align='center'>
-  <img src="../assets/images/home.png" alt="Home" />
+  <img src="src/assets/images/home.png" alt="Home" />
 </div>
 
 <h3>Gallery</h3>
 <div align='center'>
-  <img src="../assets/images/gallery.png" alt="Gallery" />
+  <img src="src/assets/images/gallery.png" alt="Gallery" />
 </div>
 
 <h3>Login</h3>
 <div align='center'>
-  <img src="../assets/images/login.png" alt="Login" />
+  <img src="src/assets/images/login.png" alt="Login" />
 </div>
 
 <h3>Notes</h3>
 <div align='center'>
-  <img src="../assets/images/notes.png" alt="Notes Image" />
+  <img src="src/assets/images/notes.png" alt="Notes Image" />
 </div>
 
 <div align='center'>
-  <img src="../assets/images/newnote.png" alt="New Note Image" />
+  <img src="src/assets/images/newnote.png" alt="New Note Image" />
 </div>
 
 <h3>Own Account</h3>
 <div align='center'>
-  <img src="../assets/images/ownaccount.png" alt="Own Account Image" />
+  <img src="src/assets/images/ownaccount.png" alt="Own Account Image" />
 </div>
 
 <h3>Reservations</h3>
 <div align='center'>
-  <img src="../assets/images/res1.png" alt="Reservation 1 Image" />
+  <img src="src/assets/images/res1.png" alt="Reservation 1 Image" />
 </div>
 
 <div align='center'>
-  <img src="../assets/images/res2.png" alt="Reservation 2 Image" />
+  <img src="src/assets/images/res2.png" alt="Reservation 2 Image" />
 </div>
 
 ## Features
