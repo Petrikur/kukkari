@@ -1,13 +1,52 @@
 # Kukkari
-Welcome to the Kukkari Website project! This is a React application built using Vite as a build tool, aimed at providing an online platform for my family members to reserve the cabin, write and view notes about cabin stuff and comment on them, view a gallery of photos, and more.
+Welcome to the Cabin Website project! This is a responsive React application built using Vite as a build tool, aimed at providing an online platform for my family members to reserve the cabin, write and view notes about cabin stuff and comment on them, view a gallery of photos, and more.
 
 Project is currently in development. All text in app is in finnish because our family is from finland.
 
 ## Demo 
 Demo of current version is hosted [here](https://kukkari.vercel.app/#/)
+If you dont want to create account, you can view images of the app below.
 You must be signed in to see most of the content so feel free to create account.
 
 I have separate web app for actual family members so feel free to test this out.
+
+<h3>Home</h3>
+<div align='center'>
+  <img src="../assets/images/home.png" alt="Home" />
+</div>
+
+<h3>Gallery</h3>
+<div align='center'>
+  <img src="../assets/images/gallery.png" alt="Gallery" />
+</div>
+
+<h3>Login</h3>
+<div align='center'>
+  <img src="../assets/images/login.png" alt="Login" />
+</div>
+
+<h3>Notes</h3>
+<div align='center'>
+  <img src="../assets/images/notes.png" alt="Notes Image" />
+</div>
+
+<div align='center'>
+  <img src="../assets/images/newnote.png" alt="New Note Image" />
+</div>
+
+<h3>Own Account</h3>
+<div align='center'>
+  <img src="../assets/images/ownaccount.png" alt="Own Account Image" />
+</div>
+
+<h3>Reservations</h3>
+<div align='center'>
+  <img src="../assets/images/res1.png" alt="Reservation 1 Image" />
+</div>
+
+<div align='center'>
+  <img src="../assets/images/res2.png" alt="Reservation 2 Image" />
+</div>
 
 ## Features
 Here are some of the features available in this application:
