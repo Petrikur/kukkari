@@ -3,12 +3,6 @@ Welcome to the Cabin Website project! This is a responsive React application bui
 
 Project is currently in development. All text in app is in finnish because our family is from finland.
 
-## Demo 
-Demo of current version is hosted [here](https://kukkari.vercel.app/#/)
-If you dont want to create account, you can view images of the app below.
-You must be signed in to see most of the content so feel free to create account.
-
-I have separate web app for actual family members so feel free to test this out.
 
 <h3>Home</h3>
 <div align='center'>
